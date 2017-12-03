@@ -30,7 +30,7 @@ public class ServicioTransmision {
     public void listaPuertos(){
         SerialPort[] comPort = SerialPort.getCommPorts();
         for (int i=0; i<comPort.length; i++){
-            System.out.println(comPort[i]);
+            System.out.println(comPort[i].getDescriptivePortName());
         }
         
     }
