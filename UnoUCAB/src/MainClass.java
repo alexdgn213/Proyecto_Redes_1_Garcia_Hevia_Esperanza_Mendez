@@ -1,5 +1,5 @@
 
-import Comunicacion.ServicioTransmicion;
+import Comunicacion.ServicioTransmision;
 import java.util.Scanner;
 
 /*
@@ -42,7 +42,7 @@ public class MainClass {
     }
 
     public static void main(String[] args) {
-        //ServicioTransmicion servicioTransmicion = new ServicioTransmicion();
+        //ServicioTransmicion servicioTransmicion = new ServicioTransmision();
         // TODO code application logic here
         new MainClass();
     }
