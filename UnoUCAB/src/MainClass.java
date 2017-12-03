@@ -17,7 +17,7 @@ public class MainClass {
      * @param args the command line arguments
      */
     public void display_menu() {
-        System.out.println("1) Option 1\n2) Option 2\n3) Option 3");
+        System.out.println("1) Enviar trama ejemplo 1\n2) Enviar trama ejemplo 2\n3) Enviar trama ejemplo 3");
         System.out.print("Selection: ");
     }
 
