@@ -11,7 +11,7 @@ import Comunicacion.ServicioTransmicion;
  *
  * @author alexd
  */
-public class MainClas {
+public class MainClass {
 
     /**
      * @param args the command line arguments
