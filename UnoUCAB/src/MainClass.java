@@ -1,50 +1,38 @@
-
 import Comunicacion.ServicioTransmision;
 import java.util.Scanner;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author alexd
- */
+
 public class MainClass {
 
-    /**
-     * @param args the command line arguments
-     */
-    public void display_menu() {
-        System.out.println("1) Enviar trama ejemplo 1\n2) Enviar trama ejemplo 2\n3) Enviar trama ejemplo 3");
-        System.out.print("Selection: ");
-    }
-
-    public MainClass() {
+        public MainClass() {
         Scanner in = new Scanner(System.in);
+        ServicioTransmision st = new ServicioTransmision();
 
         display_menu();
         switch (in.nextInt()) {
             case 1:
-                System.out.println("You picked option 1");
+                System.out.println("Los puertos disponibles son:");
+                st.listaPuertos();
                 break;
             case 2:
-                System.out.println("You picked option 2");
+                System.out.println("Elegiste opcion 2");
                 break;
             case 3:
-                System.out.println("You picked option 3");
+                System.out.println("Elegiste opcion 3");
                 break;
             default:
-                System.err.println("Unrecognized option");
+                System.err.println("Opcion no reconocida");
                 break;
         }
     }
+        
+    public void display_menu() {
+        System.out.println("1) Lista puertos disponibles\n2) Enviar trama ejemplo 2\n3) Enviar trama ejemplo 3");
+        System.out.print("Seleccionar: ");
+    }
 
     public static void main(String[] args) {
-        //ServicioTransmicion servicioTransmicion = new ServicioTransmision();
-        // TODO code application logic here
-        new MainClass();
+        MainClass mainClass = new MainClass();  
     }
 
 }

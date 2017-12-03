@@ -1,19 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Comunicacion;
 
 import com.fazecast.jSerialComm.*;
 
-/**
- *
- * @author alexd
- */
 public class ServicioTransmision {
 
-//    public ServicioTransmision() {
+    public ServicioTransmision() {
 //        SerialPort comPort = SerialPort.getCommPorts()[1];
 //        comPort.setComPortParameters(2400, 8, 0, 1);
 //        comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 1, 1);
@@ -33,9 +24,14 @@ public class ServicioTransmision {
 //        }
 //        comPort.closePort();
 //        System.out.print("Error");
-//    }
+    }
     
-    public ServicioTransmision(){
+    // Imprime por terminal la lista de los puertos disponibles
+    public void listaPuertos(){
+        SerialPort[] comPort = SerialPort.getCommPorts();
+        for (int i=0; i<comPort.length; i++){
+            System.out.println(comPort[i]);
+        }
         
     }
     
