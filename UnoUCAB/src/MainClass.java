@@ -6,8 +6,12 @@ public class MainClass {
 
         public MainClass() {
         Scanner in = new Scanner(System.in);
-        ServicioTransmision st = new ServicioTransmision();
-
+        ServicioTransmision st = new ServicioTransmision(1,2);
+        byte[] b = {1,2,3,4};
+        st.escribir(b);
+        st.leer();
+        //PruebaTransmision pruebaTransmision = new PruebaTransmision();
+        /*
         display_menu();
         switch (in.nextInt()) {
             case 1:
@@ -24,6 +28,7 @@ public class MainClass {
                 System.err.println("Opcion no reconocida");
                 break;
         }
+        */
     }
         
     public void display_menu() {
