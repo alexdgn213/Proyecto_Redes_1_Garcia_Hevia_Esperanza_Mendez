@@ -7,6 +7,9 @@ package Interfaz;
 
 import Comunicacion.ServicioTransmision;
 import Dominio.Baraja;
+import Dominio.Carta;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 
 /**
@@ -15,6 +18,7 @@ import javax.swing.ImageIcon;
  */
 public class Tablero extends javax.swing.JFrame {
     ServicioTransmision s;
+    Baraja mano;
 
     /**
      * Creates new form Tablero
@@ -22,10 +26,9 @@ public class Tablero extends javax.swing.JFrame {
     public Tablero(ServicioTransmision s) {
         this.s=s;
         initComponents();
-        Baraja b = new Baraja();
-        b.llenarMazo();
-        carta1.setIcon(new javax.swing.ImageIcon(getClass().getResource(b.getCartas().get(0).getImagen())));
-        carta2.setIcon(new javax.swing.ImageIcon(getClass().getResource(b.getCartas().get(1).getImagen())));
+        mano = new Baraja();
+        mano.llenarMazo();
+        llenarMano();
         
     }
 
@@ -40,7 +43,7 @@ public class Tablero extends javax.swing.JFrame {
 
         AreaJugador = new javax.swing.JPanel();
         Mano = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
+        PanelMano = new javax.swing.JPanel();
         carta1 = new javax.swing.JLabel();
         carta2 = new javax.swing.JLabel();
         carta3 = new javax.swing.JLabel();
@@ -60,8 +63,8 @@ public class Tablero extends javax.swing.JFrame {
         Mano.setMaximumSize(new java.awt.Dimension(900, 32767));
         Mano.setPreferredSize(new java.awt.Dimension(900, 100));
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(32767, 210));
-        jPanel1.setPreferredSize(new java.awt.Dimension(900, 210));
+        PanelMano.setMaximumSize(new java.awt.Dimension(32767, 210));
+        PanelMano.setPreferredSize(new java.awt.Dimension(900, 210));
 
         carta1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         carta1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/B0.png"))); // NOI18N
@@ -93,72 +96,64 @@ public class Tablero extends javax.swing.JFrame {
         carta10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         carta10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/Back.png"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(carta1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta5, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta6, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(carta10, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout PanelManoLayout = new javax.swing.GroupLayout(PanelMano);
+        PanelMano.setLayout(PanelManoLayout);
+        PanelManoLayout.setHorizontalGroup(
+            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelManoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(carta1)
+                .addGap(6, 6, 6)
+                .addComponent(carta2)
+                .addGap(6, 6, 6)
+                .addComponent(carta3)
+                .addGap(6, 6, 6)
+                .addComponent(carta4)
+                .addGap(6, 6, 6)
+                .addComponent(carta5)
+                .addGap(6, 6, 6)
+                .addComponent(carta6)
+                .addGap(6, 6, 6)
+                .addComponent(carta7)
+                .addGap(6, 6, 6)
+                .addComponent(carta8)
+                .addGap(6, 6, 6)
+                .addComponent(carta9)
+                .addGap(6, 6, 6)
+                .addComponent(carta10))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(carta10, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta9, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta8, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta7, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta5, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+        PanelManoLayout.setVerticalGroup(
+            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelManoLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(carta1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(carta2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(carta1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(carta3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta5, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta7, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta8, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta9, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carta10, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        Mano.setViewportView(jPanel1);
+        Mano.setViewportView(PanelMano);
 
         javax.swing.GroupLayout AreaJugadorLayout = new javax.swing.GroupLayout(AreaJugador);
         AreaJugador.setLayout(AreaJugadorLayout);
         AreaJugadorLayout.setHorizontalGroup(
             AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(AreaJugadorLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(Mano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(731, Short.MAX_VALUE)))
+            .addGroup(AreaJugadorLayout.createSequentialGroup()
+                .addComponent(Mano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 741, Short.MAX_VALUE))
         );
         AreaJugadorLayout.setVerticalGroup(
             AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 264, Short.MAX_VALUE)
-            .addGroup(AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(AreaJugadorLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AreaJugadorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
         );
 
         cartaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -180,12 +175,12 @@ public class Tablero extends javax.swing.JFrame {
                 .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(878, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
+                .addContainerGap(194, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -200,6 +195,7 @@ public class Tablero extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AreaJugador;
     private javax.swing.JScrollPane Mano;
+    private javax.swing.JPanel PanelMano;
     private javax.swing.JLabel carta1;
     private javax.swing.JLabel carta10;
     private javax.swing.JLabel carta2;
@@ -212,6 +208,36 @@ public class Tablero extends javax.swing.JFrame {
     private javax.swing.JLabel carta9;
     private javax.swing.JLabel cartaActual;
     private javax.swing.JLabel cartaMazo;
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    public void llenarMano(){
+        PanelMano.removeAll();
+        PanelMano.setPreferredSize(new java.awt.Dimension(128*mano.getCartas().size(), 210));
+
+        javax.swing.GroupLayout PanelManoLayout = new javax.swing.GroupLayout(PanelMano);
+        PanelMano.setLayout(PanelManoLayout);
+        SequentialGroup sg = PanelManoLayout.createSequentialGroup();
+        sg.addGap(10,10,10);
+        ParallelGroup pg = PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING);
+        for (Carta c: mano.getCartas()){
+            javax.swing.JLabel nuevaCarta = new javax.swing.JLabel();
+            nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen()))); 
+            sg.addComponent(nuevaCarta);
+            sg.addGap(6, 6, 6);
+            pg.addComponent(nuevaCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE);
+            
+        }
+       
+        PanelManoLayout.setHorizontalGroup(
+            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sg)
+        );
+        PanelManoLayout.setVerticalGroup(
+            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelManoLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(pg))
+        );
+        pack();
+    }
 }
