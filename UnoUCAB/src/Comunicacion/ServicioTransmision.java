@@ -22,9 +22,7 @@ public class ServicioTransmision {
             puertoSalida=puertoEntrada;
         }
     }
-    
-    
-    
+   
     // Imprime por terminal la lista de los puertos disponibles
     public static ArrayList<String> listaPuertos(){
         ArrayList<String> puertos = new ArrayList<String>();
@@ -43,19 +41,15 @@ public class ServicioTransmision {
     public byte[] leer(){
         byte[] readBuffer = null;
         try {
-            //while (true) {
-                System.out.print("Leyendo datos\n");
-                while (puertoEntrada.bytesAvailable() <= 0) {
-                    Thread.sleep(20);
-                }
-                readBuffer = new byte[puertoEntrada.bytesAvailable()];
-                
-                int numRead = puertoEntrada.readBytes(readBuffer, readBuffer.length);
-                System.out.print("Se ecnontraron: " + numRead + " bytes.:");
-                for(int i=0; i<numRead;i++) System.out.print(" "+readBuffer[i] );
-                System.out.print("\n");
-                
-            //}
+            System.out.print("Leyendo datos\n");
+            while (puertoEntrada.bytesAvailable() <= 0) {
+                Thread.sleep(20);
+            }
+            readBuffer = new byte[puertoEntrada.bytesAvailable()];
+            int numRead = puertoEntrada.readBytes(readBuffer, readBuffer.length);
+            System.out.print("Se ecnontraron: " + numRead + " bytes.:");
+            for(int i=0; i<numRead;i++) System.out.print(" "+Integer.toBinaryString(readBuffer[i] & 0xFF));
+            System.out.print("\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,6 +59,11 @@ public class ServicioTransmision {
     public void escribir(byte[] writeBuffer){
         try {
             puertoSalida.writeBytes(writeBuffer, writeBuffer.length);
+            /*byte[] envio = new byte[2];
+            envio[0] = (byte)Short.parseShort("11000000", 2);
+            envio[1] = (byte)Short.parseShort("11000000", 2);
+            puertoSalida.writeBytes(envio, envio.length);
+            */
         } catch (Exception e) {
             e.printStackTrace();
         }

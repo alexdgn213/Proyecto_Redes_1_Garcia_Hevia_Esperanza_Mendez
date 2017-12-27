@@ -62,7 +62,7 @@ public class pruebaEnvio extends javax.swing.JFrame {
 
         jLabel2.setText("Puerto de entrada:");
 
-        jLabel3.setText("Puerto de entrada:");
+        jLabel3.setText("Puerto de salida:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -201,6 +201,9 @@ public class pruebaEnvio extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         s = new ServicioTransmision(jComboBox1.getSelectedIndex(),jComboBox2.getSelectedIndex());
         panelComunicacion.setVisible(true);
+        Tablero pantallaNueva = new Tablero(s);
+        this.dispose();
+        pantallaNueva.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
