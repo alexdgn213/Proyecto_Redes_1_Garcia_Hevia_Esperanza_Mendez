@@ -272,6 +272,16 @@ public class Baraja {
         return c;
     }
     
+    public Carta obtenerCarta(String codigo){
+        Carta nuevaCarta = null;
+        for(Carta c : cartas){
+            if(c.getCampoInformacion().equals(codigo)) 
+                nuevaCarta=c;
+        }
+        cartas.remove(nuevaCarta);
+        return nuevaCarta;
+    }
+    
     public void añadirCarta(Carta c){
         cartas.add(c);
     }

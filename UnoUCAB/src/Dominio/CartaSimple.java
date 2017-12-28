@@ -5,6 +5,8 @@
  */
 package Dominio;
 
+import Comunicacion.ServicioTransmision;
+
 /**
  *
  * @author alexd
@@ -19,6 +21,10 @@ public class CartaSimple extends Carta{
         this.numero = numero;
     }
     
+    public void enviar(ServicioTransmision s){
+        s.enviarCartaMesa(this, "00", "00", "1");
     
+    }
     
+   
 }

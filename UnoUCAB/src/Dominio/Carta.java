@@ -5,6 +5,8 @@
  */
 package Dominio;
 
+import Comunicacion.ServicioTransmision;
+
 /**
  *
  * @author alexd
@@ -47,6 +49,7 @@ public abstract class Carta {
         this.campoInformacion = campoInformacion;
     }
     
+    public abstract void enviar(ServicioTransmision s);
     
     
 }

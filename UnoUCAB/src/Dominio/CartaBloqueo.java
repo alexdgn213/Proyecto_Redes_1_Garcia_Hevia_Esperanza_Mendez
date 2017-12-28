@@ -5,6 +5,8 @@
  */
 package Dominio;
 
+import Comunicacion.ServicioTransmision;
+
 /**
  *
  * @author alexd
@@ -15,6 +17,11 @@ public class CartaBloqueo extends Carta{
     public CartaBloqueo(String color, String codigo, String imagen, String campoInformacion) {
         super(codigo, imagen, campoInformacion);
         this.color=color;
+    }
+
+    @Override
+    public void enviar(ServicioTransmision s) {
+        s.enviarCartaMesa(this, "00", "00", "1");
     }
 
 }

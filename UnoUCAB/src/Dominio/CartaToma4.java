@@ -5,6 +5,8 @@
  */
 package Dominio;
 
+import Comunicacion.ServicioTransmision;
+
 /**
  *
  * @author alexd
@@ -13,6 +15,11 @@ public class CartaToma4 extends Carta{
 
     public CartaToma4(String codigo, String imagen, String campoInformacion) {
         super(codigo, imagen, campoInformacion);
+    }
+
+    @Override
+    public void enviar(ServicioTransmision s) {
+        s.enviarCartaMesa(this, "00", "00", "1");
     }
     
     
