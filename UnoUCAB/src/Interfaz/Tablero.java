@@ -16,12 +16,13 @@ import javax.swing.ImageIcon;
 /**
  *
  * @author alexd
+ * Descripcion: Tablero principal del juego donde todo ocurre
  */
 public class Tablero extends javax.swing.JFrame {
     ServicioTransmision s;
-    Baraja mano;
-    Baraja mesa;
-    Baraja mazo;
+    Baraja mano; // Cartas del jugador 
+    Baraja mesa; // Cartas en la mesa
+    Baraja mazo; // Cartas en el mazo
 
     /**
      * Creates new form Tablero
@@ -34,8 +35,8 @@ public class Tablero extends javax.swing.JFrame {
         mazo = new Baraja();
         mazo.llenarMazo();
         mazo.barajear();
-        obtenerPrimeraCarta();
-        obtenerCartasPropias();
+        obtenerPrimeraCarta(); // Temporal
+        obtenerCartasPropias();// Temporal
         mostrarTodo();
         
     }
@@ -269,16 +270,19 @@ public class Tablero extends javax.swing.JFrame {
     private javax.swing.JLabel cartaActual;
     private javax.swing.JLabel cartaMazo;
     // End of variables declaration//GEN-END:variables
-
+    
+    // Obtiene la primera carta del mazo(debe comprobar que sea valida)
     public void obtenerPrimeraCarta(){
         mesa.añadirCarta(mazo.obtenerCarta());
     }
     
+    // Obtiene las 7 cartas del juagdor y las envia(PENDIENTE)
     public void obtenerCartasPropias(){
         for(int i=0; i<7;i++)
             mano.añadirCarta(mazo.obtenerCarta());
     }
     
+    // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
         PanelMano.removeAll();
         PanelMano.setPreferredSize(new java.awt.Dimension((126*mano.getCartas().size()+10), 210));
@@ -293,7 +297,7 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                c.enviar(s);
+                c.jugar(s);
                 mesa.getCartas().add(c);
                 mano.eliminarCarta(c.getCodigo());
                 mostrarTodo();
@@ -318,10 +322,12 @@ public class Tablero extends javax.swing.JFrame {
         
     }
     
+    // Muestra la ultima carta en la mesa
     public void mostrarMesa(){
        cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(mesa.getCartas().get(mesa.getCartas().size()-1).getImagen()))); 
     }
     
+    //Actualiza la interfaz con todos los cambios
     public void mostrarTodo(){
         mostrarMano();
         mostrarMesa();

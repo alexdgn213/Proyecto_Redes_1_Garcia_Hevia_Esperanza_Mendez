@@ -20,7 +20,7 @@ public class CartaToma2 extends Carta{
     }
 
     @Override
-    public void enviar(ServicioTransmision s) {
+    public void jugar(ServicioTransmision s) {
         s.enviarCartaMesa(this, "00", "00", "1");
     }
     

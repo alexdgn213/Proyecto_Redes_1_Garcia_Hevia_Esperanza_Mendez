@@ -10,11 +10,18 @@ import Comunicacion.ServicioTransmision;
 /**
  *
  * @author alexd
+ * Descirpcion: Clase Abstracta para mantener todos los tipos de cartas ordenados y con sus funciones al dia
  */
 public abstract class Carta {
-    String codigo;
-    String imagen;
-    String campoInformacion;
+    String codigo;//Codigo unico de cada carta:
+                  // Letras 1 y 2: Color y tipo en caso de cartas de color(Colores: B:Azul R:Rojo G:Verde Y:Amarillo),
+                  //                                                       Tipos: 0-9 si la carta es numerica, R: reversa, B:Bloqueo, t:toma 2.
+                  //               Codigo de las cartas especiales: CC: cambia color, +4: Toma 4
+                  // Letra 3: para difetrenciar las copias de una misma carta(se les coloca una letra para diferenciarlas)
+    String imagen;// Ruta en la que se consigue dicha carta;
+    String campoInformacion; // Bits que se deben enviar en la trama de informacion:
+                             //    - Si es de color se guardan 6 bits incluyendo el color;
+                             //    - Si es especial solo se guardan 4 bits y los demas se agrega al jugar(el color al que se cambiara)
 
     public Carta(String codigo, String imagen, String campoInformacion) {
         this.codigo = codigo;
@@ -49,7 +56,8 @@ public abstract class Carta {
         this.campoInformacion = campoInformacion;
     }
     
-    public abstract void enviar(ServicioTransmision s);
+    // Metodo con todo lo que debe hacer cada carta al jugarse
+    public abstract void jugar(ServicioTransmision s);
     
     
 }

@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author alexd
+ * Descripcion: Clase donde se configura la conexion y se crea o busca una partida
  */
 public class Inicio extends javax.swing.JFrame {
     ServicioTransmision s;

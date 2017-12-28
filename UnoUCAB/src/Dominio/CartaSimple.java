@@ -21,7 +21,8 @@ public class CartaSimple extends Carta{
         this.numero = numero;
     }
     
-    public void enviar(ServicioTransmision s){
+    public void jugar(ServicioTransmision s){
+        // AL ser una carta simple debe primedo comprobarse si se puede jugar(PENDIENTE) y luego se envia
         s.enviarCartaMesa(this, "00", "00", "1");
     
     }

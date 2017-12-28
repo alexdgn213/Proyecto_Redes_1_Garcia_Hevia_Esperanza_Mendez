@@ -12,6 +12,7 @@ import java.util.List;
 /**
  *
  * @author alexd
+ * Descripcion: Clase que contiene un grupo de cartas(Mazo,mesa,mano de cada jugador)
  */
 public class Baraja {
     List<Carta> cartas;
@@ -20,6 +21,7 @@ public class Baraja {
         cartas=new ArrayList<Carta>();
     }
     
+    // Genera el mazo completo de cartas
     public void llenarMazo(){
         Carta c;
         
@@ -96,11 +98,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Verde", 9, "G9A", "/Interfaz/Imagenes/Cartas/G9.png", "011001");
         cartas.add(c);
-        c = new CartaBloqueo("Verde", "GBA", "/Interfaz/Imagenes/Cartas/GB.png", "001010");
+        c = new CartaBloqueo("Verde", "GBA", "/Interfaz/Imagenes/Cartas/GB.png", "011010");
         cartas.add(c);
-        c = new CartaReversa("Verde", "GRA", "/Interfaz/Imagenes/Cartas/GR.png", "001011");
+        c = new CartaReversa("Verde", "GRA", "/Interfaz/Imagenes/Cartas/GR.png", "011011");
         cartas.add(c);
-        c = new CartaToma2("Verde", "GTA", "/Interfaz/Imagenes/Cartas/GT.png", "001100");
+        c = new CartaToma2("Verde", "GTA", "/Interfaz/Imagenes/Cartas/GT.png", "011100");
         cartas.add(c);
         c = new CartaSimple("Verde", 1, "G1B", "/Interfaz/Imagenes/Cartas/G1.png", "010001");
         cartas.add(c);
@@ -120,11 +122,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Verde", 9, "G9B", "/Interfaz/Imagenes/Cartas/G9.png", "011001");
         cartas.add(c);
-        c = new CartaBloqueo("Verde", "GBB", "/Interfaz/Imagenes/Cartas/GB.png", "001010");
+        c = new CartaBloqueo("Verde", "GBB", "/Interfaz/Imagenes/Cartas/GB.png", "011010");
         cartas.add(c);
-        c = new CartaReversa("Verde", "GRB", "/Interfaz/Imagenes/Cartas/GR.png", "001011");
+        c = new CartaReversa("Verde", "GRB", "/Interfaz/Imagenes/Cartas/GR.png", "011011");
         cartas.add(c);
-        c = new CartaToma2("Verde", "GTB", "/Interfaz/Imagenes/Cartas/GT.png", "001100");
+        c = new CartaToma2("Verde", "GTB", "/Interfaz/Imagenes/Cartas/GT.png", "011100");
         cartas.add(c);
         
         // Cargo todas las cartas Rojas
@@ -148,11 +150,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Rojo", 9, "R9A", "/Interfaz/Imagenes/Cartas/R9.png", "101001");
         cartas.add(c);
-        c = new CartaBloqueo("Rojo", "RBA", "/Interfaz/Imagenes/Cartas/RB.png", "001010");
+        c = new CartaBloqueo("Rojo", "RBA", "/Interfaz/Imagenes/Cartas/RB.png", "101010");
         cartas.add(c);
-        c = new CartaReversa("Rojo", "RRA", "/Interfaz/Imagenes/Cartas/RR.png", "001011");
+        c = new CartaReversa("Rojo", "RRA", "/Interfaz/Imagenes/Cartas/RR.png", "101011");
         cartas.add(c);
-        c = new CartaToma2("Rojo", "RTA", "/Interfaz/Imagenes/Cartas/RT.png", "001100");
+        c = new CartaToma2("Rojo", "RTA", "/Interfaz/Imagenes/Cartas/RT.png", "101100");
         cartas.add(c);
         c = new CartaSimple("Rojo", 1, "R1B", "/Interfaz/Imagenes/Cartas/R1.png", "100001");
         cartas.add(c);
@@ -172,11 +174,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Rojo", 9, "R9B", "/Interfaz/Imagenes/Cartas/R9.png", "101001");
         cartas.add(c);
-        c = new CartaBloqueo("Rojo", "RBB", "/Interfaz/Imagenes/Cartas/RB.png", "001010");
+        c = new CartaBloqueo("Rojo", "RBB", "/Interfaz/Imagenes/Cartas/RB.png", "101010");
         cartas.add(c);
-        c = new CartaReversa("Rojo", "RRB", "/Interfaz/Imagenes/Cartas/RR.png", "001011");
+        c = new CartaReversa("Rojo", "RRB", "/Interfaz/Imagenes/Cartas/RR.png", "101011");
         cartas.add(c);
-        c = new CartaToma2("Rojo", "RTB", "/Interfaz/Imagenes/Cartas/RT.png", "001100");
+        c = new CartaToma2("Rojo", "RTB", "/Interfaz/Imagenes/Cartas/RT.png", "101100");
         cartas.add(c);
         
         // Cargo todas las cartas Amarillas
@@ -200,11 +202,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Amarillo", 9, "Y9A", "/Interfaz/Imagenes/Cartas/Y9.png", "111001");
         cartas.add(c);
-        c = new CartaBloqueo("Amarillo", "YBA", "/Interfaz/Imagenes/Cartas/YB.png", "001010");
+        c = new CartaBloqueo("Amarillo", "YBA", "/Interfaz/Imagenes/Cartas/YB.png", "111010");
         cartas.add(c);
-        c = new CartaReversa("Amarillo", "YRA", "/Interfaz/Imagenes/Cartas/YR.png", "001011");
+        c = new CartaReversa("Amarillo", "YRA", "/Interfaz/Imagenes/Cartas/YR.png", "111011");
         cartas.add(c);
-        c = new CartaToma2("Amarillo", "YTA", "/Interfaz/Imagenes/Cartas/YT.png", "001100");
+        c = new CartaToma2("Amarillo", "YTA", "/Interfaz/Imagenes/Cartas/YT.png", "111100");
         cartas.add(c);
         c = new CartaSimple("Amarillo", 1, "Y1B", "/Interfaz/Imagenes/Cartas/Y1.png", "110001");
         cartas.add(c);
@@ -224,11 +226,11 @@ public class Baraja {
         cartas.add(c);
         c = new CartaSimple("Amarillo", 9, "Y9B", "/Interfaz/Imagenes/Cartas/Y9.png", "111001");
         cartas.add(c);
-        c = new CartaBloqueo("Amarillo", "YBB", "/Interfaz/Imagenes/Cartas/YB.png", "001010");
+        c = new CartaBloqueo("Amarillo", "YBB", "/Interfaz/Imagenes/Cartas/YB.png", "111010");
         cartas.add(c);
-        c = new CartaReversa("Amarillo", "YRB", "/Interfaz/Imagenes/Cartas/YR.png", "001011");
+        c = new CartaReversa("Amarillo", "YRB", "/Interfaz/Imagenes/Cartas/YR.png", "111011");
         cartas.add(c);
-        c = new CartaToma2("Amarillo", "YTB", "/Interfaz/Imagenes/Cartas/YT.png", "001100");
+        c = new CartaToma2("Amarillo", "YTB", "/Interfaz/Imagenes/Cartas/YT.png", "111100");
         cartas.add(c);
         
         // Cargo todas las cartas Cambia Color
@@ -242,16 +244,18 @@ public class Baraja {
         cartas.add(c);
         
         // Cargo todas las cartas +4
-        c = new CartaToma4("+4A", "/Interfaz/Imagenes/Cartas/+4.png", "1101");
+        c = new CartaToma4("+4A", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4B", "/Interfaz/Imagenes/Cartas/+4.png", "1101");
+        c = new CartaToma4("+4B", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4C", "/Interfaz/Imagenes/Cartas/+4.png", "1101");
+        c = new CartaToma4("+4C", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4D", "/Interfaz/Imagenes/Cartas/+4.png", "1101");
+        c = new CartaToma4("+4D", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
     }
     
+    
+    /// Quita una carta de la baraja
     public void eliminarCarta(String codigo){
         Carta borrar = null;
         for (Carta c:cartas){
@@ -262,16 +266,19 @@ public class Baraja {
         if (borrar!=null) cartas.remove(borrar);
     }
     
+    // Ordena al azar las cartas
     public void barajear(){
         Collections.shuffle(cartas);
     }
     
+    // Quita la primera carta de la baraja y la retorna    
     public Carta obtenerCarta(){
         Carta c = cartas.get(0);
         cartas.remove(0);
         return c;
     }
     
+    // Quita una carta en especifico de la baraja y la retorna 
     public Carta obtenerCarta(String codigo){
         Carta nuevaCarta = null;
         for(Carta c : cartas){
@@ -282,6 +289,7 @@ public class Baraja {
         return nuevaCarta;
     }
     
+    // Añade una carta a la baraja
     public void añadirCarta(Carta c){
         cartas.add(c);
     }
