@@ -12,7 +12,7 @@ package Dominio;
 public class CartaBloqueo extends Carta{
     String color;
 
-    public CartaBloqueo(String codigo, String imagen, String campoInformacion, String color) {
+    public CartaBloqueo(String color, String codigo, String imagen, String campoInformacion) {
         super(codigo, imagen, campoInformacion);
         this.color=color;
     }

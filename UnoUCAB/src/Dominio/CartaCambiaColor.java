@@ -10,11 +10,9 @@ package Dominio;
  * @author alexd
  */
 public class CartaCambiaColor extends Carta{
-    String color;
 
-    public CartaCambiaColor(String color, String codigo, String imagen, String campoInformacion) {
+    public CartaCambiaColor(String codigo, String imagen, String campoInformacion) {
         super(codigo, imagen, campoInformacion);
-        this.color = color;
     }
     
     

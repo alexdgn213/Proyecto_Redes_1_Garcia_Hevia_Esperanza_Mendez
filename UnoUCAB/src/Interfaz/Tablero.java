@@ -8,6 +8,7 @@ package Interfaz;
 import Comunicacion.ServicioTransmision;
 import Dominio.Baraja;
 import Dominio.Carta;
+import java.util.Collections;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
@@ -19,6 +20,8 @@ import javax.swing.ImageIcon;
 public class Tablero extends javax.swing.JFrame {
     ServicioTransmision s;
     Baraja mano;
+    Baraja mesa;
+    Baraja mazo;
 
     /**
      * Creates new form Tablero
@@ -27,8 +30,13 @@ public class Tablero extends javax.swing.JFrame {
         this.s=s;
         initComponents();
         mano = new Baraja();
-        mano.llenarMazo();
-        llenarMano();
+        mesa = new Baraja();
+        mazo = new Baraja();
+        mazo.llenarMazo();
+        mazo.barajear();
+        obtenerPrimeraCarta();
+        obtenerCartasPropias();
+        mostrarTodo();
         
     }
 
@@ -54,6 +62,7 @@ public class Tablero extends javax.swing.JFrame {
         carta8 = new javax.swing.JLabel();
         carta9 = new javax.swing.JLabel();
         carta10 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         cartaActual = new javax.swing.JLabel();
         cartaMazo = new javax.swing.JLabel();
 
@@ -80,6 +89,11 @@ public class Tablero extends javax.swing.JFrame {
 
         carta5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         carta5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/Y6.png"))); // NOI18N
+        carta5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                carta5MouseClicked(evt);
+            }
+        });
 
         carta6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         carta6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/+4.png"))); // NOI18N
@@ -141,19 +155,33 @@ public class Tablero extends javax.swing.JFrame {
 
         Mano.setViewportView(PanelMano);
 
+        jButton1.setText("Obtener Carta");
+        jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout AreaJugadorLayout = new javax.swing.GroupLayout(AreaJugador);
         AreaJugador.setLayout(AreaJugadorLayout);
         AreaJugadorLayout.setHorizontalGroup(
             AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AreaJugadorLayout.createSequentialGroup()
                 .addComponent(Mano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 741, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         AreaJugadorLayout.setVerticalGroup(
             AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AreaJugadorLayout.createSequentialGroup()
+            .addGroup(AreaJugadorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                .addGroup(AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AreaJugadorLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)))
         );
 
         cartaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -167,15 +195,15 @@ public class Tablero extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(AreaJugador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(525, 525, 525)
                 .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(484, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(AreaJugador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -191,6 +219,15 @@ public class Tablero extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void carta5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_carta5MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_carta5MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mano.añadirCarta(mazo.obtenerCarta());
+        mostrarTodo();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AreaJugador;
@@ -208,11 +245,21 @@ public class Tablero extends javax.swing.JFrame {
     private javax.swing.JLabel carta9;
     private javax.swing.JLabel cartaActual;
     private javax.swing.JLabel cartaMazo;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 
-    public void llenarMano(){
+    public void obtenerPrimeraCarta(){
+        mesa.añadirCarta(mazo.obtenerCarta());
+    }
+    
+    public void obtenerCartasPropias(){
+        for(int i=0; i<7;i++)
+            mano.añadirCarta(mazo.obtenerCarta());
+    }
+    
+    public void mostrarMano(){
         PanelMano.removeAll();
-        PanelMano.setPreferredSize(new java.awt.Dimension(128*mano.getCartas().size(), 210));
+        PanelMano.setPreferredSize(new java.awt.Dimension((126*mano.getCartas().size()+10), 210));
 
         javax.swing.GroupLayout PanelManoLayout = new javax.swing.GroupLayout(PanelMano);
         PanelMano.setLayout(PanelManoLayout);
@@ -221,7 +268,14 @@ public class Tablero extends javax.swing.JFrame {
         ParallelGroup pg = PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING);
         for (Carta c: mano.getCartas()){
             javax.swing.JLabel nuevaCarta = new javax.swing.JLabel();
-            nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen()))); 
+            nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
+            nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mesa.getCartas().add(c);
+                mano.eliminarCarta(c.getCodigo());
+                mostrarTodo();
+            }
+            });
             sg.addComponent(nuevaCarta);
             sg.addGap(6, 6, 6);
             pg.addComponent(nuevaCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE);
@@ -238,6 +292,16 @@ public class Tablero extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addGroup(pg))
         );
+        
+    }
+    
+    public void mostrarMesa(){
+       cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(mesa.getCartas().get(mesa.getCartas().size()-1).getImagen()))); 
+    }
+    
+    public void mostrarTodo(){
+        mostrarMano();
+        mostrarMesa();
         pack();
     }
 }
