@@ -6,6 +6,7 @@
 package Dominio;
 
 import Comunicacion.ServicioTransmision;
+import javax.swing.JLabel;
 
 /**
  *
@@ -23,5 +24,13 @@ public class CartaBloqueo extends Carta{
     public void jugar(ServicioTransmision s) {
         s.enviarCartaMesa(this, "00", "00", "1");
     }
+
+    @Override
+    public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {
+        if(this.color.equals("Rojo")) rojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png")));
+        else if(this.color.equals("Azul")) azul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul.png")));
+        else if(this.color.equals("Verde")) verde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde.png")));
+        else if(this.color.equals("Amarillo")) amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
+     }
 
 }

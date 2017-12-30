@@ -6,6 +6,7 @@
 package Dominio;
 
 import Comunicacion.ServicioTransmision;
+import javax.swing.JLabel;
 
 /**
  *
@@ -20,6 +21,10 @@ public class CartaToma4 extends Carta{
     @Override
     public void jugar(ServicioTransmision s) {
         s.enviarCartaMesa(this, "00", "00", "1");
+    }
+
+    @Override
+    public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {
     }
     
     

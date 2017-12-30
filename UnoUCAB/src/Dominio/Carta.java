@@ -6,6 +6,7 @@
 package Dominio;
 
 import Comunicacion.ServicioTransmision;
+import javax.swing.JLabel;
 
 /**
  *
@@ -58,6 +59,10 @@ public abstract class Carta {
     
     // Metodo con todo lo que debe hacer cada carta al jugarse
     public abstract void jugar(ServicioTransmision s);
+    
+    // Metodo con lo que se debe hacer para mostrar el color de la carta
+    // El String color es para cuando se coloca un cambia color o un +4
+    public abstract void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color);
     
     
 }
