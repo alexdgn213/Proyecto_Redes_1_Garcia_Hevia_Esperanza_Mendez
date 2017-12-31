@@ -58,7 +58,7 @@ public abstract class Carta {
     }
     
     // Metodo con todo lo que debe hacer cada carta al jugarse
-    public abstract void jugar(ServicioTransmision s);
+    public abstract void jugar(ServicioTransmision s, String origen, String destino, String direccion);
     
     // Metodo con lo que se debe hacer para mostrar el color de la carta
     // El String color es para cuando se coloca un cambia color o un +4

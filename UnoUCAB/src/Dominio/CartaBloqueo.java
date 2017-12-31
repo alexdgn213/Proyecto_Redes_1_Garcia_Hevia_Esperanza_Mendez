@@ -21,8 +21,8 @@ public class CartaBloqueo extends Carta{
     }
 
     @Override
-    public void jugar(ServicioTransmision s) {
-        s.enviarCartaMesa(this, "00", "00", "1");
+    public void jugar(ServicioTransmision s, String origen, String destino, String direccion) {
+        s.enviarCartaMesa(this, origen, destino,direccion);
     }
 
     @Override

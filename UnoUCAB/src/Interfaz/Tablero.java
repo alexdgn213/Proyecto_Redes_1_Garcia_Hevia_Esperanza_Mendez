@@ -34,6 +34,8 @@ public class Tablero extends javax.swing.JFrame {
     Baraja jugador4; // Cartas que tiene el jugador 4 (Rojo)
     int sentido; //Sentido del juego 0:en reloj, 1:en contrareloj 
     String colorNuevo; //Cuando se juega un +4 o un cambia color aqui se almacena el nuevo colot
+    String jugadorSiguiente;
+    String jugadorAnterior;
     Turno turno; //Permite determinar si es el turno del jugador y ejecutar la espera por los demas jugadores
     String codigoJugador; // Contiene el codigo del jugador actual
 
@@ -51,14 +53,14 @@ public class Tablero extends javax.swing.JFrame {
         mazo.llenarMazo();
         mazo.barajear();
         colorNuevo= "Rojo"; //Temporal
-        obtenerPrimeraCarta(); // Temporal
         obtenerCartasPropias();// Temporal
-        mostrarTodo();
         turno = new Turno(this);
         if(jugadorInicial){
             new Thread(new MensajeUI(PanelMensaje,"Se ha iniciado la partida",4)).start();
+            obtenerPrimeraCarta(); // Temporal
             turno.setPuedeJugar(true);
             codigoJugador="00";
+            jugadorSiguiente="01";
             s.IniciarPartida();
             new Thread(turno).start();
         }
@@ -67,9 +69,7 @@ public class Tablero extends javax.swing.JFrame {
             codigoJugador="01";
             new Thread(turno).start();
         }
-        
-        
-        
+        mostrarTodo();
     }
 
     /**
@@ -99,6 +99,7 @@ public class Tablero extends javax.swing.JFrame {
         colorAzul = new javax.swing.JLabel();
         colorAmarillo = new javax.swing.JLabel();
         colorVerde = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         cartaMazo = new javax.swing.JLabel();
         cartaActual = new javax.swing.JLabel();
         cartasJugador3 = new javax.swing.JLabel();
@@ -218,6 +219,13 @@ public class Tablero extends javax.swing.JFrame {
 
         colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde2.png"))); // NOI18N
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Iconos/ic_block_white_24dp_1x.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout AreaJugadorLayout = new javax.swing.GroupLayout(AreaJugador);
         AreaJugador.setLayout(AreaJugadorLayout);
         AreaJugadorLayout.setHorizontalGroup(
@@ -233,15 +241,14 @@ public class Tablero extends javax.swing.JFrame {
                         .addComponent(colorAmarillo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(colorVerde)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addComponent(Mano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(8, 8, 8))
         );
         AreaJugadorLayout.setVerticalGroup(
             AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AreaJugadorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AreaJugadorLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,6 +259,13 @@ public class Tablero extends javax.swing.JFrame {
                     .addComponent(colorAmarillo)
                     .addComponent(colorVerde))
                 .addContainerGap())
+            .addGroup(AreaJugadorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(AreaJugadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AreaJugadorLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(Mano, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)))
         );
 
         cartaMazo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -263,7 +277,6 @@ public class Tablero extends javax.swing.JFrame {
         });
 
         cartaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/B0.png"))); // NOI18N
 
         cartasJugador3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas7.png"))); // NOI18N
 
@@ -331,7 +344,7 @@ public class Tablero extends javax.swing.JFrame {
                                 .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(355, 355, 355)
+                        .addGap(363, 363, 363)
                         .addComponent(iconoSentido)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -363,7 +376,7 @@ public class Tablero extends javax.swing.JFrame {
                         .addComponent(cartasJugador4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(121, 121, 121)))
+                        .addGap(131, 131, 131)))
                 .addComponent(AreaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(79, 79, 79))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -376,7 +389,7 @@ public class Tablero extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(36, 36, 36)
+                .addGap(39, 39, 39)
                 .addComponent(iconoSentido)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -405,6 +418,23 @@ public class Tablero extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cartaMazoMouseClicked
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        if(turno.puedeJugar()){
+            if(sentido==0){
+                s.pasarTurno(codigoJugador,jugadorSiguiente, "0");
+            }
+            else{
+                s.pasarTurno(codigoJugador,jugadorAnterior, "1");
+            }
+            esperarTurno();
+            mostrarTodo();
+            new Thread(new MensajeUI(PanelMensaje,"Pasaste",4)).start();
+        }
+        else{
+            new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
+        }
+    }//GEN-LAST:event_jLabel1MouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AreaJugador;
     private javax.swing.JLabel Fondo;
@@ -432,6 +462,7 @@ public class Tablero extends javax.swing.JFrame {
     private javax.swing.JLabel colorVerde;
     private javax.swing.JLabel fondoMensaje;
     private javax.swing.JLabel iconoSentido;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel mensaje;
     private javax.swing.JLabel numeroJugador2;
@@ -481,7 +512,12 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(turno.puedeJugar()){
-                    c.jugar(s);
+                    if(sentido==0){
+                        c.jugar(s,codigoJugador,jugadorSiguiente,"0");
+                    }
+                    else{
+                        c.jugar(s,codigoJugador,jugadorAnterior,"1");
+                    }
                     mesa.getCartas().add(c);
                     mano.eliminarCarta(c.getCodigo());
                     esperarTurno();
@@ -516,8 +552,10 @@ public class Tablero extends javax.swing.JFrame {
         colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul2.png")));
         colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde2.png")));
         colorAmarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo2.png")));
-        Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
-        c.mostrarColor(colorRojo, colorAzul, colorVerde, colorAmarillo,colorNuevo);
+        if(mesa.getCartas().size()>0){
+            Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
+            c.mostrarColor(colorRojo, colorAzul, colorVerde, colorAmarillo,colorNuevo);
+            }
         }
     
     // Muestra el sentido actual
@@ -531,14 +569,17 @@ public class Tablero extends javax.swing.JFrame {
     }
     // Muestra la ultima carta en la mesa
     public void mostrarMesa(){
-       Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
-       if(c!=null){
-           cartaActual.setVisible(true);
-           cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
+        if(mesa.getCartas().size()>0){
+            Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
+            if(c!=null){
+                cartaActual.setVisible(true);
+                cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
+            }
        }
-       else{
-           cartaActual.setVisible(true);
-       }
+        else{
+            cartaActual.setIcon(null);
+        }
+       
         
     }
     
@@ -638,6 +679,31 @@ public class Tablero extends javax.swing.JFrame {
     public void setCodigoJugador(String codigoJugador) {
         this.codigoJugador = codigoJugador;
     }
+
+    public String getColorNuevo() {
+        return colorNuevo;
+    }
+
+    public void setColorNuevo(String colorNuevo) {
+        this.colorNuevo = colorNuevo;
+    }
+
+    public String getJugadorSiguiente() {
+        return jugadorSiguiente;
+    }
+
+    public void setJugadorSiguiente(String jugadorSiguiente) {
+        this.jugadorSiguiente = jugadorSiguiente;
+    }
+
+    public String getJugadorAnterior() {
+        return jugadorAnterior;
+    }
+
+    public void setJugadorAnterior(String jugadorAnterior) {
+        this.jugadorAnterior = jugadorAnterior;
+    }
+    
     
     
     

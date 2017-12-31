@@ -79,11 +79,16 @@ public class ServicioTransmision {
             //Una vez aqui debo ver que tipo de instruccion es y decidir que hare
             String byteControl = pasarByteAString(readBuffer[1]);
             String instruccion = byteControl.substring(4); // Campo de control
+            String origen = byteControl.substring(0,2); // Equipo de Origen
             String destino =  byteControl.substring(2,4); // Equipo de destino
             if(instruccion.equals(instruccionCartaMesa)){  
-                // La informacion enviada es una carta juagada
-                nuevaCartaMesa(readBuffer[2],mesa,mazo);
-                return true;
+                if(!origen.equals(t.getCodigoJugador())){
+                    // La informacion enviada es una carta juagada
+                    return nuevaCartaMesa(t,origen,destino,readBuffer[2],mesa,mazo);
+                }
+                else{ 
+                    return false;
+                }
             }
             else if(instruccion.equals(instruccionInicio)){
                 // La informacion enviada es sobre el inicio de la partida
@@ -92,7 +97,7 @@ public class ServicioTransmision {
                 String jugadores = informacion.substring(6);
                 if(modo.equals("0")){
                     // La informacion enviada es para iniciar la partida y asignar jugadores
-                    if(!destino.equals(t.getCodigoJugador())){
+                    if(!origen.equals(t.getCodigoJugador())){
                         // es un jugador nuevo asi que se cambia su codigo por el nuevo
                         t.setCodigoJugador(unirseAPartida(readBuffer[2],t.getCodigoJugador()));
                         return false;
@@ -106,11 +111,13 @@ public class ServicioTransmision {
                 else{
                     // La informecion es el anuncio de cuantos jugadores son se envia a los demas 
                     // a menos que sea el jugador inicial
-                    if(!destino.equals(t.getCodigoJugador())){
+                    jugadoresContinuos(t,jugadores);
+                    if(!origen.equals(t.getCodigoJugador())){
                         anunciarJugadores(jugadores);
                         return false;
                     }
                     else{
+                        t.setJugadorAnterior(jugadores);
                         return true;
                     }
                 }
@@ -189,13 +196,15 @@ public class ServicioTransmision {
                 +"\n");
         puertoSalida.writeBytes(envio, envio.length);
     }
-   
+      
     // Metodo ejecutado al definir que un mensaje es de una nueva carta, la quita de la mano del jugador(Pendiente por hacer)
     // y la inserta en la mesa
-    public void nuevaCartaMesa(byte informacion, Baraja mesa, Baraja mazo){
+    public boolean nuevaCartaMesa(Tablero t,String origen,String destino,byte informacion, Baraja mesa, Baraja mazo){
         String campoCarta = pasarByteAString(informacion);
         // Obtengo el campoInformacion de dicha carta
         String tipoCarta = campoCarta.substring(4);
+        String direccion = campoCarta.substring(1,2);
+        // El usuario no paso si no que coloco una carta
         String codigoCarta;
         int num = Integer.parseInt(tipoCarta);
         if(num<=1100){
@@ -208,6 +217,26 @@ public class ServicioTransmision {
         Carta nuevaCarta = mazo.obtenerCarta(codigoCarta);
         // la agrego a la mesa
         mesa.añadirCarta(nuevaCarta);
+        nuevaCarta.jugar(this, origen, destino, direccion);
+        if(t.getCodigoJugador().equals(destino)) return true;
+        return false;
+        
+    }
+    
+    // Metodo que envia una el paso de un turno
+    public void pasarTurno(String origen, String destino,String sentido){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort(origen+destino+instruccionCartaMesa, 2);
+        envio[2] = (byte)Short.parseShort("1"+sentido+"1111", 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
     }
     
     //COnvierte un Byte en un string(para poder comparar) 
@@ -216,5 +245,58 @@ public class ServicioTransmision {
         //Para asegurar que sean 8 caracteres(llenar de ceros a la izquierda)
         while(retorno.length()<8) retorno = "0" + retorno;
         return retorno;
+    }
+    
+    //Asigna quien es el jugador siguiente y quien es el anterior
+    public void jugadoresContinuos(Tablero t,String jugadores){
+        if(jugadores.equals("11")){
+            if(t.getCodigoJugador().equals("00")){
+                t.setJugadorAnterior("11");
+                t.setJugadorSiguiente("01");
+            }
+            else if(t.getCodigoJugador().equals("01")){
+                t.setJugadorAnterior("00");
+                t.setJugadorSiguiente("10");
+            }
+            else if(t.getCodigoJugador().equals("10")){
+                t.setJugadorAnterior("01");
+                t.setJugadorSiguiente("11");
+            }
+            else if(t.getCodigoJugador().equals("11")){
+                t.setJugadorAnterior("10");
+                t.setJugadorSiguiente("00");
+            }
+        }
+        else if(jugadores.equals("10")){
+            if(t.getCodigoJugador().equals("00")){
+                t.setJugadorAnterior("10");
+                t.setJugadorSiguiente("01");
+            }
+            else if(t.getCodigoJugador().equals("01")){
+                t.setJugadorAnterior("00");
+                t.setJugadorSiguiente("10");
+            }
+            else if(t.getCodigoJugador().equals("10")){
+                t.setJugadorAnterior("01");
+                t.setJugadorSiguiente("00");
+            }
+        }
+        else if(jugadores.equals("01")){
+            if(t.getCodigoJugador().equals("00")){
+                t.setJugadorAnterior("01");
+                t.setJugadorSiguiente("01");
+            }
+            else if(t.getCodigoJugador().equals("01")){
+                t.setJugadorAnterior("00");
+                t.setJugadorSiguiente("00");
+            }
+        }
+        else if(jugadores.equals("00")){
+            if(t.getCodigoJugador().equals("00")){
+                t.setJugadorAnterior("00");
+                t.setJugadorSiguiente("00");
+            }
+        }
+        
     }
 }
