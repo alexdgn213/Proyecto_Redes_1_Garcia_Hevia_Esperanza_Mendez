@@ -9,6 +9,7 @@ import Comunicacion.ServicioTransmision;
 import Dominio.Baraja;
 import Dominio.Carta;
 import Dominio.CartaSimple;
+import Dominio.Turno;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -27,13 +29,18 @@ public class Tablero extends javax.swing.JFrame {
     Baraja mano; // Cartas del jugador 
     Baraja mesa; // Cartas en la mesa
     Baraja mazo; // Cartas en el mazo
+    Baraja jugador2; // Cartas que tiene el jugador 2 (Amarillo)
+    Baraja jugador3; // Cartas que tiene el jugador 3 (Verde)
+    Baraja jugador4; // Cartas que tiene el jugador 4 (Rojo)
     int sentido; //Sentido del juego 0:en reloj, 1:en contrareloj 
     String colorNuevo; //Cuando se juega un +4 o un cambia color aqui se almacena el nuevo colot
+    Turno turno; //Permite determinar si es el turno del jugador y ejecutar la espera por los demas jugadores
+    String codigoJugador; // Contiene el codigo del jugador actual
 
     /**
      * Creates new form Tablero
      */
-    public Tablero(ServicioTransmision s) {
+    public Tablero(ServicioTransmision s, Boolean jugadorInicial) {
         this.s=s;
         initComponents();
         Mano.getViewport().setBackground(new Color(33,150,243));
@@ -47,6 +54,21 @@ public class Tablero extends javax.swing.JFrame {
         obtenerPrimeraCarta(); // Temporal
         obtenerCartasPropias();// Temporal
         mostrarTodo();
+        turno = new Turno(this);
+        if(jugadorInicial){
+            new Thread(new MensajeUI(PanelMensaje,"Se ha iniciado la partida",4)).start();
+            turno.setPuedeJugar(true);
+            codigoJugador="00";
+            s.IniciarPartida();
+            new Thread(turno).start();
+        }
+        else{
+            new Thread(new MensajeUI(PanelMensaje,"Te haz unido a la partida",4)).start();
+            codigoJugador="01";
+            new Thread(turno).start();
+        }
+        
+        
         
     }
 
@@ -77,7 +99,6 @@ public class Tablero extends javax.swing.JFrame {
         colorAzul = new javax.swing.JLabel();
         colorAmarillo = new javax.swing.JLabel();
         colorVerde = new javax.swing.JLabel();
-        botonEnviar = new javax.swing.JButton();
         cartaMazo = new javax.swing.JLabel();
         cartaActual = new javax.swing.JLabel();
         cartasJugador3 = new javax.swing.JLabel();
@@ -233,14 +254,6 @@ public class Tablero extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        botonEnviar.setText("leer Carta");
-        botonEnviar.setToolTipText("");
-        botonEnviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEnviarActionPerformed(evt);
-            }
-        });
-
         cartaMazo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cartaMazo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas/Back.png"))); // NOI18N
         cartaMazo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -308,9 +321,7 @@ public class Tablero extends javax.swing.JFrame {
                         .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(76, 76, 76)
-                                .addComponent(botonEnviar)
-                                .addGap(73, 73, 73)
+                                .addGap(230, 230, 230)
                                 .addComponent(cartasJugador4)
                                 .addGap(39, 39, 39)
                                 .addComponent(numeroJugador4)
@@ -358,9 +369,6 @@ public class Tablero extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
-                        .addComponent(botonEnviar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(109, 109, 109)
                         .addComponent(numeroJugador4))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -382,18 +390,19 @@ public class Tablero extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
-        s.ObtenerMensaje(mesa, mazo);
-        mostrarTodo();
-    }//GEN-LAST:event_botonEnviarActionPerformed
-
     private void carta5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_carta5MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_carta5MouseClicked
 
     private void cartaMazoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartaMazoMouseClicked
-        mano.añadirCarta(mazo.obtenerCarta());
-        mostrarTodo();
+        if(turno.puedeJugar()){
+            mano.añadirCarta(mazo.obtenerCarta());
+            esperarTurno();
+            mostrarTodo();
+        }
+        else{
+            new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
+        }
     }//GEN-LAST:event_cartaMazoMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -402,7 +411,6 @@ public class Tablero extends javax.swing.JFrame {
     private javax.swing.JScrollPane Mano;
     private javax.swing.JPanel PanelMano;
     private javax.swing.JPanel PanelMensaje;
-    private javax.swing.JButton botonEnviar;
     private javax.swing.JLabel carta1;
     private javax.swing.JLabel carta10;
     private javax.swing.JLabel carta2;
@@ -453,6 +461,10 @@ public class Tablero extends javax.swing.JFrame {
             mano.añadirCarta(mazo.obtenerCarta());
     }
     
+    public void esperarTurno(){
+        new Thread(turno).start();
+    }
+    
     // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
         PanelMano.removeAll();
@@ -468,10 +480,16 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                c.jugar(s);
-                mesa.getCartas().add(c);
-                mano.eliminarCarta(c.getCodigo());
-                mostrarTodo();
+                if(turno.puedeJugar()){
+                    c.jugar(s);
+                    mesa.getCartas().add(c);
+                    mano.eliminarCarta(c.getCodigo());
+                    esperarTurno();
+                    mostrarTodo();
+                }
+                else{
+                    new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
+                }
             }
             });
             sg.addComponent(nuevaCarta);
@@ -513,7 +531,15 @@ public class Tablero extends javax.swing.JFrame {
     }
     // Muestra la ultima carta en la mesa
     public void mostrarMesa(){
-       cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(mesa.getCartas().get(mesa.getCartas().size()-1).getImagen()))); 
+       Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
+       if(c!=null){
+           cartaActual.setVisible(true);
+           cartaActual.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
+       }
+       else{
+           cartaActual.setVisible(true);
+       }
+        
     }
     
     //Actualiza la interfaz con todos los cambios
@@ -524,4 +550,95 @@ public class Tablero extends javax.swing.JFrame {
         mostrarSentido();
         pack();
     }
+
+    public ServicioTransmision getS() {
+        return s;
+    }
+
+    public void setS(ServicioTransmision s) {
+        this.s = s;
+    }
+
+    public Baraja getMano() {
+        return mano;
+    }
+
+    public void setMano(Baraja mano) {
+        this.mano = mano;
+    }
+
+    public Baraja getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Baraja mesa) {
+        this.mesa = mesa;
+    }
+
+    public Baraja getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(Baraja mazo) {
+        this.mazo = mazo;
+    }
+
+    public int getSentido() {
+        return sentido;
+    }
+
+    public void setSentido(int sentido) {
+        this.sentido = sentido;
+    }
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
+    }
+
+    public Baraja getJugador2() {
+        return jugador2;
+    }
+
+    public void setJugador2(Baraja jugador2) {
+        this.jugador2 = jugador2;
+    }
+
+    public Baraja getJugador3() {
+        return jugador3;
+    }
+
+    public void setJugador3(Baraja jugador3) {
+        this.jugador3 = jugador3;
+    }
+
+    public Baraja getJugador4() {
+        return jugador4;
+    }
+
+    public void setJugador4(Baraja jugador4) {
+        this.jugador4 = jugador4;
+    }
+
+    public JPanel getjPanel1() {
+        return jPanel1;
+    }
+
+    public void setjPanel1(JPanel jPanel1) {
+        this.jPanel1 = jPanel1;
+    }
+
+    public String getCodigoJugador() {
+        return codigoJugador;
+    }
+
+    public void setCodigoJugador(String codigoJugador) {
+        this.codigoJugador = codigoJugador;
+    }
+    
+    
+    
 }

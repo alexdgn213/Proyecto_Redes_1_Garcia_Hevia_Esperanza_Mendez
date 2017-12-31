@@ -2,6 +2,7 @@ package Comunicacion;
 
 import Dominio.Baraja;
 import Dominio.Carta;
+import Interfaz.Tablero;
 import com.fazecast.jSerialComm.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class ServicioTransmision {
     String flag = "01111110";
     String instruccionCartaMesa = "0111";
     String instruccionCartaMano = "0110";
+    String instruccionInicio = "0001";
 
     public ServicioTransmision(int entrada, int salida) {    
         //COnfiguracion inicial
@@ -56,8 +58,8 @@ public class ServicioTransmision {
     }
     
     // Metodo principal a ejecutarse cuando se espera una jugada, aqui es donde se lee la informacion enviada y se decide
-    // que se hara dependiendo de lo enviado;
-    public void ObtenerMensaje(Baraja mesa, Baraja mazo){
+    // que se hara dependiendo de lo enviado, retorna un booleano el cual indica si ahora es turno del jugador o no
+    public boolean ObtenerMensaje(Tablero t,Baraja mesa, Baraja mazo){
         byte[] readBuffer = null; // Bytes para almacenar la informacion
         try {
             //Espero a que algo llegue
@@ -70,19 +72,106 @@ public class ServicioTransmision {
             
             //Comprobacion de que se envio
             System.out.print("Se encontro el mensaje:\n");
-            for(int i=0; i<numRead;i++) System.out.print(" "+Integer.toBinaryString(readBuffer[i] & 0xFF));
+            for(int i=0; i<numRead;i++) System.out.print(" "+
+                    pasarByteAString(readBuffer[i]));
             System.out.print("\n");
             
             //Una vez aqui debo ver que tipo de instruccion es y decidir que hare
             String byteControl = pasarByteAString(readBuffer[1]);
             String instruccion = byteControl.substring(4); // Campo de control
-            if(instruccion.equals(instruccionCartaMesa)){ 
+            String destino =  byteControl.substring(2,4); // Equipo de destino
+            if(instruccion.equals(instruccionCartaMesa)){  
                 // La informacion enviada es una carta juagada
                 nuevaCartaMesa(readBuffer[2],mesa,mazo);
+                return true;
+            }
+            else if(instruccion.equals(instruccionInicio)){
+                // La informacion enviada es sobre el inicio de la partida
+                String informacion = pasarByteAString(readBuffer[2]);
+                String modo = informacion.substring(5,6);
+                String jugadores = informacion.substring(6);
+                if(modo.equals("0")){
+                    // La informacion enviada es para iniciar la partida y asignar jugadores
+                    if(!destino.equals(t.getCodigoJugador())){
+                        // es un jugador nuevo asi que se cambia su codigo por el nuevo
+                        t.setCodigoJugador(unirseAPartida(readBuffer[2],t.getCodigoJugador()));
+                        return false;
+                    }
+                    else{
+                        // Es el mismo jugador que inicio asi que se envia el mensaje con el num de jugadores
+                        anunciarJugadores(jugadores);
+                        return false;
+                    }
+                }
+                else{
+                    // La informecion es el anuncio de cuantos jugadores son se envia a los demas 
+                    // a menos que sea el jugador inicial
+                    if(!destino.equals(t.getCodigoJugador())){
+                        anunciarJugadores(jugadores);
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
+                }
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
+    }
+    
+        
+    // Metodo que envia la informacion para iniciar una partida
+    public void IniciarPartida(){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort("0000"+instruccionInicio, 2);
+        envio[2] = (byte)Short.parseShort("10000000", 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
+    }
+    
+    // Metodo que envia cuantos jugadores hay en tota, El string es el numero de jugadores en binario
+    public void anunciarJugadores(String jugadores){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort("0000"+instruccionInicio, 2);
+        envio[2] = (byte)Short.parseShort("100001"+jugadores, 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
+    }
+    
+    // Metodo ejecutado al querer unirse a una partida, asigna el numero de jugador y envia el mensaje al siguiente
+    public String unirseAPartida(byte informacion,String codigoJugador){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort("0000"+instruccionInicio, 2);
+        envio[2] = (byte) (informacion+(byte)Short.parseShort("0000001", 2));
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        codigoJugador = pasarByteAString(envio[2]).substring(6);
+        System.out.println("Soy el jugador: "+codigoJugador);
+        puertoSalida.writeBytes(envio, envio.length);
+        return codigoJugador;
     }
 
     // Metodo que envia una carta al ser jugada, las comprobaciones deben ir en el metodo de la carta
@@ -100,7 +189,7 @@ public class ServicioTransmision {
                 +"\n");
         puertoSalida.writeBytes(envio, envio.length);
     }
-    
+   
     // Metodo ejecutado al definir que un mensaje es de una nueva carta, la quita de la mano del jugador(Pendiente por hacer)
     // y la inserta en la mesa
     public void nuevaCartaMesa(byte informacion, Baraja mesa, Baraja mazo){
