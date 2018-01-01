@@ -23,13 +23,22 @@ public abstract class Carta {
     String campoInformacion; // Bits que se deben enviar en la trama de informacion:
                              //    - Si es de color se guardan 6 bits incluyendo el color;
                              //    - Si es especial solo se guardan 4 bits y los demas se agrega al jugar(el color al que se cambiara)
-
+    String color;
+    
     public Carta(String codigo, String imagen, String campoInformacion) {
         this.codigo = codigo;
         this.imagen = imagen;
         this.campoInformacion = campoInformacion;
     }
 
+    public Carta(String codigo, String imagen, String campoInformacion, String color) {
+        this.codigo = codigo;
+        this.imagen = imagen;
+        this.campoInformacion = campoInformacion;
+        this.color = color;
+    }
+
+    
     public Carta() {
     }
 
@@ -59,6 +68,9 @@ public abstract class Carta {
     
     // Metodo con todo lo que debe hacer cada carta al jugarse
     public abstract void jugar(ServicioTransmision s, String origen, String destino, String direccion);
+    
+    // Metodo con todo lo que debe hacer cada carta al jugarse
+    public abstract void sacar(ServicioTransmision s, String origen, String destino, String direccion);
     
     // Metodo con lo que se debe hacer para mostrar el color de la carta
     // El String color es para cuando se coloca un cambia color o un +4

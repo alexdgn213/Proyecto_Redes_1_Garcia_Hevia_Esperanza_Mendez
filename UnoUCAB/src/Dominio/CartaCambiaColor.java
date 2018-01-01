@@ -22,6 +22,9 @@ public class CartaCambiaColor extends Carta{
     public void jugar(ServicioTransmision s, String origen, String destino, String direccion) {
         s.enviarCartaMesa(this, origen, destino, direccion);
     }
+    public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        s.enviarCartaMano(this, origen,destino,direccion);
+    }
 
     @Override
     public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {

@@ -13,6 +13,8 @@ import Dominio.Turno;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
@@ -36,6 +38,7 @@ public class Tablero extends javax.swing.JFrame {
     String colorNuevo; //Cuando se juega un +4 o un cambia color aqui se almacena el nuevo colot
     String jugadorSiguiente;
     String jugadorAnterior;
+    String jugadorExtra;
     Turno turno; //Permite determinar si es el turno del jugador y ejecutar la espera por los demas jugadores
     String codigoJugador; // Contiene el codigo del jugador actual
 
@@ -50,22 +53,23 @@ public class Tablero extends javax.swing.JFrame {
         mano = new Baraja();
         mesa = new Baraja();
         mazo = new Baraja();
+        jugador2= new Baraja();
+        jugador3 = new Baraja();
+        jugador4 = new Baraja();
         mazo.llenarMazo();
         mazo.barajear();
         colorNuevo= "Rojo"; //Temporal
-        obtenerCartasPropias();// Temporal
-        turno = new Turno(this);
+        turno = new Turno(this,PanelMensaje);
         if(jugadorInicial){
             new Thread(new MensajeUI(PanelMensaje,"Se ha iniciado la partida",4)).start();
-            obtenerPrimeraCarta(); // Temporal
             turno.setPuedeJugar(true);
             codigoJugador="00";
             jugadorSiguiente="01";
             s.IniciarPartida();
             new Thread(turno).start();
+            //obtenerPrimeraCarta(); // Temporal
         }
         else{
-            new Thread(new MensajeUI(PanelMensaje,"Te haz unido a la partida",4)).start();
             codigoJugador="01";
             new Thread(turno).start();
         }
@@ -278,8 +282,6 @@ public class Tablero extends javax.swing.JFrame {
 
         cartaActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        cartasJugador3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas7.png"))); // NOI18N
-
         cartasJugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas7.png"))); // NOI18N
 
         cartasJugador4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas7.png"))); // NOI18N
@@ -319,11 +321,11 @@ public class Tablero extends javax.swing.JFrame {
                 .addGap(76, 76, 76)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cartasJugador2)
+                        .addComponent(cartasJugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(numeroJugador2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cartasJugador3)
+                        .addComponent(cartasJugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
                         .addComponent(numeroJugador3)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,7 +337,7 @@ public class Tablero extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(230, 230, 230)
-                                .addComponent(cartasJugador4)
+                                .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(39, 39, 39)
                                 .addComponent(numeroJugador4)
                                 .addGap(80, 80, 80))
@@ -359,21 +361,21 @@ public class Tablero extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cartasJugador3)
+                            .addComponent(cartasJugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
                                 .addComponent(numeroJugador3)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(98, 98, 98)
-                                .addComponent(cartasJugador2)
+                                .addComponent(cartasJugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(numeroJugador2)
                                 .addGap(59, 59, 59))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cartasJugador4)
+                        .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(131, 131, 131)))
@@ -409,8 +411,9 @@ public class Tablero extends javax.swing.JFrame {
 
     private void cartaMazoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartaMazoMouseClicked
         if(turno.puedeJugar()){
-            mano.añadirCarta(mazo.obtenerCarta());
-            esperarTurno();
+            Carta c=mazo.obtenerCarta();
+            c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
+            mano.añadirCarta(c);
             mostrarTodo();
         }
         else{
@@ -472,24 +475,44 @@ public class Tablero extends javax.swing.JFrame {
     
     // Obtiene la primera carta del mazo(debe comprobar que sea valida)
     public void obtenerPrimeraCarta(){
-        boolean listo = false;
-        while(!listo){
-            Carta c = mazo.obtenerCarta();
-            if(c instanceof CartaSimple){
-                mesa.añadirCarta(c);
-                listo=true;
+        if(codigoJugador.equals("00")){
+             boolean listo = false;
+            while(!listo){
+                Carta c = mazo.obtenerCarta();
+                if(c instanceof CartaSimple){
+                    c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
+                    try{Thread.sleep(1000);
+                    }   catch (InterruptedException ex) {
+                        Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    // Por ahora siempre el primer turno es del siguiente(problemas con el envio de yo a yo y con la posibilidad de varios juhadores)
+                    c.jugar(s, codigoJugador, jugadorSiguiente, String.valueOf(sentido));
+                    mesa.añadirCarta(c);
+                    listo=true;
+                }
+                else{
+                    mazo.añadirCarta(c);
+                    mazo.barajear();
+                } 
             }
-            else{
-                mazo.añadirCarta(c);
-                mazo.barajear();
-            } 
         }
+       
     }
     
     // Obtiene las 7 cartas del juagdor y las envia(PENDIENTE)
     public void obtenerCartasPropias(){
-        for(int i=0; i<7;i++)
-            mano.añadirCarta(mazo.obtenerCarta());
+        if(mano.getCartas().size()==0){
+            while(mano.getCartas().size()<7){      
+                Carta nuevaCarta;
+                nuevaCarta = mazo.obtenerCarta();
+                if(nuevaCarta!=null){
+                    nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+                    mano.añadirCarta(nuevaCarta);
+                }
+            }
+            s.anunciarTomarCartas(codigoJugador, jugadorSiguiente, String.valueOf(sentido));
+        }        
+
     }
     
     public void esperarTurno(){
@@ -498,7 +521,8 @@ public class Tablero extends javax.swing.JFrame {
     
     // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
-        PanelMano.removeAll();
+        try{
+            PanelMano.removeAll();
         PanelMano.setPreferredSize(new java.awt.Dimension((126*mano.getCartas().size()+10), 210));
 
         javax.swing.GroupLayout PanelManoLayout = new javax.swing.GroupLayout(PanelMano);
@@ -534,18 +558,87 @@ public class Tablero extends javax.swing.JFrame {
             
         }
        
-        PanelManoLayout.setHorizontalGroup(
-            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sg)
-        );
+        
         PanelManoLayout.setVerticalGroup(
             PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelManoLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addGroup(pg))
         );
+        PanelManoLayout.setHorizontalGroup(
+            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sg)
+        );
+        }
+        catch (Exception e){
+        
+        }
     }
     
+    public void iconoJugador(JLabel imagen, JLabel cantidad, int cartas){
+        cantidad.setText(String.valueOf(cartas));
+        if (cartas==0){
+            imagen.setIcon(null); 
+        }
+        else if (cartas==1){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas1.png"))); 
+        }
+        else if (cartas==2){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas2.png"))); 
+        }
+        else if (cartas==3){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas3.png"))); 
+        }
+        else if (cartas==4){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas4.png"))); 
+        }
+        else if (cartas==5){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas5.png"))); 
+        }
+        else if (cartas==6){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas6.png"))); 
+        }
+        else if (cartas==7){
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas7.png"))); 
+        }
+        else{
+            imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas+.png"))); 
+        }
+        
+    }
+    
+    public void mostrarOtrosJugadores(){
+        iconoJugador(cartasJugador2,numeroJugador2,jugador2.getCartas().size());
+        iconoJugador(cartasJugador3,numeroJugador3,jugador3.getCartas().size());
+        iconoJugador(cartasJugador4,numeroJugador4,jugador4.getCartas().size());
+    }
+    
+    public void mostrarCartasJugadores(){
+        System.out.print("Jugador 1: ");
+        for(Carta c : mano.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        System.out.print("\nJugador 2: ");
+        for(Carta c : jugador2.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        System.out.print("\nJugador 3: ");
+        for(Carta c : jugador3.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        System.out.print("\nJugador 4: ");
+        for(Carta c : jugador4.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        System.out.print("\nMesa: ");
+        for(Carta c : jugador4.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        for(Carta c : mesa.getCartas()){
+            System.out.print(c.getCodigo()+" ");
+        }
+        System.out.print("\n");
+    }
     // Muestra el color actual en la paleta inferior
     public void mostrarColor(){
         colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo2.png")));
@@ -585,11 +678,17 @@ public class Tablero extends javax.swing.JFrame {
     
     //Actualiza la interfaz con todos los cambios
     public void mostrarTodo(){
-        mostrarMano();
-        mostrarMesa();
-        mostrarColor();
-        mostrarSentido();
-        pack();
+        try {
+            mostrarMano();
+            mostrarMesa();
+            mostrarColor();
+            mostrarSentido();
+            mostrarOtrosJugadores();
+            mostrarCartasJugadores();
+            pack();
+        }
+        catch(Exception e) {}
+        
     }
 
     public ServicioTransmision getS() {
@@ -702,6 +801,14 @@ public class Tablero extends javax.swing.JFrame {
 
     public void setJugadorAnterior(String jugadorAnterior) {
         this.jugadorAnterior = jugadorAnterior;
+    }
+
+    public String getJugadorExtra() {
+        return jugadorExtra;
+    }
+
+    public void setJugadorExtra(String jugadorExtra) {
+        this.jugadorExtra = jugadorExtra;
     }
     
     

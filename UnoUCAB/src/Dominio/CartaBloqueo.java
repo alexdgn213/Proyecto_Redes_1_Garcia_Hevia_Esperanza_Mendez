@@ -13,16 +13,18 @@ import javax.swing.JLabel;
  * @author alexd
  */
 public class CartaBloqueo extends Carta{
-    String color;
 
     public CartaBloqueo(String color, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion);
-        this.color=color;
+        super(codigo, imagen, campoInformacion,color);
     }
 
     @Override
     public void jugar(ServicioTransmision s, String origen, String destino, String direccion) {
         s.enviarCartaMesa(this, origen, destino,direccion);
+    }
+    
+    public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        s.enviarCartaMano(this, origen,destino,direccion);
     }
 
     @Override
@@ -33,4 +35,5 @@ public class CartaBloqueo extends Carta{
         else if(this.color.equals("Amarillo")) amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
      }
 
+    
 }

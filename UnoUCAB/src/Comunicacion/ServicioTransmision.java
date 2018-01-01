@@ -21,6 +21,7 @@ public class ServicioTransmision {
     String instruccionCartaMesa = "0111";
     String instruccionCartaMano = "0110";
     String instruccionInicio = "0001";
+    String instruccionCartasIniciales = "0010";
 
     public ServicioTransmision(int entrada, int salida) {    
         //COnfiguracion inicial
@@ -59,16 +60,17 @@ public class ServicioTransmision {
     
     // Metodo principal a ejecutarse cuando se espera una jugada, aqui es donde se lee la informacion enviada y se decide
     // que se hara dependiendo de lo enviado, retorna un booleano el cual indica si ahora es turno del jugador o no
-    public boolean ObtenerMensaje(Tablero t,Baraja mesa, Baraja mazo){
+    public boolean ObtenerMensaje(Tablero t){
         byte[] readBuffer = null; // Bytes para almacenar la informacion
         try {
             //Espero a que algo llegue
-            while (puertoEntrada.bytesAvailable() <= 0) {
+            while (puertoEntrada.bytesAvailable() < 4) {
                 Thread.sleep(20);
             }
+            
             // Algo llego asi que lo almaceno en el buffer
-            readBuffer = new byte[puertoEntrada.bytesAvailable()];
-            int numRead = puertoEntrada.readBytes(readBuffer, readBuffer.length);
+            readBuffer = new byte[4];
+            int numRead = puertoEntrada.readBytes(readBuffer, 4);
             
             //Comprobacion de que se envio
             System.out.print("Se encontro el mensaje:\n");
@@ -81,14 +83,37 @@ public class ServicioTransmision {
             String instruccion = byteControl.substring(4); // Campo de control
             String origen = byteControl.substring(0,2); // Equipo de Origen
             String destino =  byteControl.substring(2,4); // Equipo de destino
-            if(instruccion.equals(instruccionCartaMesa)){  
+            if(instruccion.equals(instruccionCartaMesa)){ 
                 if(!origen.equals(t.getCodigoJugador())){
                     // La informacion enviada es una carta juagada
-                    return nuevaCartaMesa(t,origen,destino,readBuffer[2],mesa,mazo);
+                    return nuevaCartaMesa(t,origen,destino,readBuffer[2]);
                 }
                 else{ 
                     return false;
                 }
+            }
+            else if(instruccion.equals(instruccionCartaMano)){  
+                if(!origen.equals(t.getCodigoJugador())){
+                    // La informacion enviada es una carta tomada del mazo
+                    return nuevaCartaMano(t,origen,destino,readBuffer[2]);
+                }
+                else{ 
+                    return false;
+                }
+            }
+            else if(instruccion.equals(instruccionCartasIniciales)){  
+                if(!origen.equals(t.getCodigoJugador())){
+                    if(destino.equals(t.getCodigoJugador())){
+                        t.obtenerCartasPropias();
+                    }
+                    else{
+                        anunciarTomarCartas(t.getCodigoJugador(),t.getJugadorSiguiente(),String.valueOf(t.getSentido()));
+                    }  
+                }
+                if(destino.equals("00")){
+                    t.obtenerPrimeraCarta();
+                }
+                return false;
             }
             else if(instruccion.equals(instruccionInicio)){
                 // La informacion enviada es sobre el inicio de la partida
@@ -118,7 +143,8 @@ public class ServicioTransmision {
                     }
                     else{
                         t.setJugadorAnterior(jugadores);
-                        return true;
+                        t.obtenerCartasPropias();
+                        return false;
                     }
                 }
                 
@@ -152,6 +178,21 @@ public class ServicioTransmision {
         envio[0] = (byte)Short.parseShort(flag, 2);
         envio[1] = (byte)Short.parseShort("0000"+instruccionInicio, 2);
         envio[2] = (byte)Short.parseShort("100001"+jugadores, 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
+    }
+    
+    public void anunciarTomarCartas(String origen,String destino,String sentido){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort(origen+destino+instruccionCartasIniciales, 2);
+        envio[2] = (byte)Short.parseShort("1"+sentido+"000000", 2);
         envio[3] = (byte)Short.parseShort(flag, 2);
         System.out.print("Mensaje enviado: "
                 +" "+pasarByteAString(envio[0])
@@ -199,7 +240,7 @@ public class ServicioTransmision {
       
     // Metodo ejecutado al definir que un mensaje es de una nueva carta, la quita de la mano del jugador(Pendiente por hacer)
     // y la inserta en la mesa
-    public boolean nuevaCartaMesa(Tablero t,String origen,String destino,byte informacion, Baraja mesa, Baraja mazo){
+    public boolean nuevaCartaMesa(Tablero t,String origen,String destino,byte informacion){
         String campoCarta = pasarByteAString(informacion);
         // Obtengo el campoInformacion de dicha carta
         String tipoCarta = campoCarta.substring(4);
@@ -213,12 +254,72 @@ public class ServicioTransmision {
         }
         // Si es una carta especial solo me importan los ultimos 4 bits
         else codigoCarta = tipoCarta;
-        // Quito la carta del mazo(deberia ser de la mano del jugador)
-        Carta nuevaCarta = mazo.obtenerCarta(codigoCarta);
+        // Quito la carta de la mano del jugador)
+        Carta nuevaCarta=null;
+        if(nuevaCarta==null){
+            nuevaCarta=t.getJugador4().obtenerCarta(codigoCarta);
+        }
+        if(nuevaCarta==null){
+            nuevaCarta=t.getJugador2().obtenerCarta(codigoCarta);
+        }
+        if(nuevaCarta==null){
+            nuevaCarta=t.getJugador3().obtenerCarta(codigoCarta);
+        }
         // la agrego a la mesa
-        mesa.añadirCarta(nuevaCarta);
-        nuevaCarta.jugar(this, origen, destino, direccion);
+        if(nuevaCarta!=null){
+            t.getMesa().añadirCarta(nuevaCarta);
+            nuevaCarta.jugar(this, origen, destino, direccion);
+        }
         if(t.getCodigoJugador().equals(destino)) return true;
+        return false;
+        
+    }
+    
+    public void enviarCartaMano(Carta c, String origen,String destino,String sentido){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort(origen+destino+instruccionCartaMano, 2);
+        envio[2] = (byte)Short.parseShort("1"+sentido+c.getCampoInformacion(), 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
+    }
+    
+    public boolean nuevaCartaMano(Tablero t,String origen,String destino,byte informacion){
+        String campoCarta = pasarByteAString(informacion);
+        // Obtengo el campoInformacion de dicha carta
+        String tipoCarta = campoCarta.substring(4);
+        String direccion = campoCarta.substring(1,2);
+        // El usuario no paso si no que coloco una carta
+        String codigoCarta;
+        int num = Integer.parseInt(tipoCarta);
+        if(num<=1100){
+            // Si es una carta de color me importan los ultimos 6 bits
+            codigoCarta = campoCarta.substring(2);
+        }
+        // Si es una carta especial solo me importan los ultimos 4 bits
+        else codigoCarta = tipoCarta;
+        // Quito la carta del mazo
+        Carta nuevaCarta=t.getMazo().obtenerCarta(codigoCarta);
+        // La agrego a su correspondiente jugador
+        if(nuevaCarta!=null){
+            enviarCartaMano(nuevaCarta,origen,destino,direccion);
+            if(origen.equals(t.getJugadorSiguiente())){
+                t.getJugador2().añadirCarta(nuevaCarta);
+            }
+            else if(origen.equals(t.getJugadorExtra())){
+                t.getJugador3().añadirCarta(nuevaCarta);
+            }
+            else if(origen.equals(t.getJugadorAnterior())){
+                t.getJugador4().añadirCarta(nuevaCarta);
+            }
+            
+        }
         return false;
         
     }
@@ -253,18 +354,22 @@ public class ServicioTransmision {
             if(t.getCodigoJugador().equals("00")){
                 t.setJugadorAnterior("11");
                 t.setJugadorSiguiente("01");
+                t.setJugadorExtra("10");
             }
             else if(t.getCodigoJugador().equals("01")){
                 t.setJugadorAnterior("00");
                 t.setJugadorSiguiente("10");
+                t.setJugadorExtra("11");
             }
             else if(t.getCodigoJugador().equals("10")){
                 t.setJugadorAnterior("01");
                 t.setJugadorSiguiente("11");
+                t.setJugadorExtra("00");
             }
             else if(t.getCodigoJugador().equals("11")){
                 t.setJugadorAnterior("10");
                 t.setJugadorSiguiente("00");
+                t.setJugadorExtra("01");
             }
         }
         else if(jugadores.equals("10")){

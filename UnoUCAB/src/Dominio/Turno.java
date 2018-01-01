@@ -10,6 +10,7 @@ import Interfaz.MensajeUI;
 import Interfaz.Tablero;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 
 /**
  *
@@ -21,10 +22,12 @@ public class Turno implements Runnable{
     boolean puedeJugar; // Booleando que indica si es el turno del jugador
     Tablero t; // Es necesario para manejar los datos del tablero
     String codigoJugador; // Contiene el codigo del jugador actual
+    JPanel panelMensaje;
 
-    public Turno( Tablero t) {
+    public Turno( Tablero t, JPanel panelMensaje) {
         this.puedeJugar = false;
         this.t=t;
+        this.panelMensaje = panelMensaje;
         this.codigoJugador="00"; 
     }
     
@@ -33,17 +36,17 @@ public class Turno implements Runnable{
     @Override
     public void run() {
         this.puedeJugar=false; // QUito el turno al jugador
+        new Thread(new MensajeUI(panelMensaje,"Esperando el turno",4)).start();
         // MIentras no sea el turno del jugador
         while(!puedeJugar){
-            try{Thread.sleep(1000);
+        try{Thread.sleep(10);
             }   catch (InterruptedException ex) {
                 Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.puedeJugar=t.getS().ObtenerMensaje(t,t.getMesa(),t.getMazo()); // recibo un mensaje 
-            t.mostrarMesa();
-            t.mostrarSentido();
-            t.mostrarColor();
+            this.puedeJugar=t.getS().ObtenerMensaje(t); // recibo un mensaje 
+            t.mostrarTodo();
         } 
+        new Thread(new MensajeUI(panelMensaje,"Es tu turno!",4)).start();
     }
 
     public boolean puedeJugar() {

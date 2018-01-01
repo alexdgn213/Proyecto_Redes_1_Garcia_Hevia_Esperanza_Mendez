@@ -27,7 +27,8 @@ public class CartaToma4 extends Carta{
     public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {
     }
     
-    
-    
+    public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        s.enviarCartaMano(this, origen,destino,direccion);
+    }
     
 }

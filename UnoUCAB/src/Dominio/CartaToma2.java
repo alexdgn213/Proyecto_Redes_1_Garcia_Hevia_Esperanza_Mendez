@@ -13,11 +13,9 @@ import javax.swing.JLabel;
  * @author alexd
  */
 public class CartaToma2 extends Carta{
-    String color;
 
     public CartaToma2(String color, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion);
-        this.color = color;
+        super(codigo, imagen, campoInformacion,color);
     }
 
     @Override
@@ -25,6 +23,10 @@ public class CartaToma2 extends Carta{
         s.enviarCartaMesa(this, origen, destino, direccion);
     }
 
+    public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        s.enviarCartaMano(this, origen,destino,direccion);
+    }
+    
     @Override
     public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {
         if(this.color.equals("Rojo")) rojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png")));

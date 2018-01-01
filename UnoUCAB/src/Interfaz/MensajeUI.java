@@ -34,10 +34,10 @@ public class MensajeUI implements Runnable{
     @Override
     public void run() {
         while(PanelMensaje.isVisible()){
-        try{Thread.sleep(1000);
-        }   catch (InterruptedException ex) {
-            Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            try{Thread.sleep(100);
+            }   catch (InterruptedException ex) {
+                Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         PanelMensaje.setVisible(true);
         try{Thread.sleep( duracion*1000 );

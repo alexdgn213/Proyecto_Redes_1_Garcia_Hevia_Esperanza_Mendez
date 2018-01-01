@@ -13,12 +13,10 @@ import javax.swing.JLabel;
  * @author alexd
  */
 public class CartaSimple extends Carta{
-    String color;
     int numero;
 
     public CartaSimple(String color, int numero, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion);
-        this.color = color;
+        super(codigo, imagen, campoInformacion,color);
         this.numero = numero;
     }
     
@@ -28,14 +26,12 @@ public class CartaSimple extends Carta{
     
     }
 
-    public String getColor() {
-        return color;
+    public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        // AL ser una carta simple debe primedo comprobarse si se puede jugar(PENDIENTE) y luego se envia
+        s.enviarCartaMano(this, origen,destino,direccion);
+    
     }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
+    
     public int getNumero() {
         return numero;
     }
