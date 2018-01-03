@@ -20,6 +20,7 @@ public class MensajeUI implements Runnable{
     int duracion;
     String mensaje;
     JLabel texto;
+    JLabel imagen;
 
     // Parametros: PanelMensaje: panel a mostrar
     //             mensajeL mensaje a mostrar
@@ -28,7 +29,7 @@ public class MensajeUI implements Runnable{
         this.PanelMensaje = Panelmensaje;
         this.duracion = duracion;
         texto = (JLabel)this.PanelMensaje.getComponent(0);
-        JLabel imagen = (JLabel)this.PanelMensaje.getComponent(1);
+        imagen = (JLabel)this.PanelMensaje.getComponent(1);
         texto.setText(mensaje);
         this.mensaje = mensaje; 
     }
@@ -36,19 +37,25 @@ public class MensajeUI implements Runnable{
     
     @Override
     public void run() {
-        while(PanelMensaje.isVisible()){
+        texto = (JLabel)this.PanelMensaje.getComponent(0);
+        imagen = (JLabel)this.PanelMensaje.getComponent(1);
+        while(imagen.isVisible()){
             try{Thread.sleep(100);
             }   catch (InterruptedException ex) {
                 Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        PanelMensaje.setVisible(true);
+        imagen.setVisible(true);
+        texto.setText(mensaje);
         try{Thread.sleep( duracion*1000 );
         }   catch (InterruptedException ex) {
             Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         texto = (JLabel)this.PanelMensaje.getComponent(0);
-        if(texto.getText().equals(mensaje)) PanelMensaje.setVisible(false);
+        if(texto.getText().equals(mensaje)){
+            imagen.setVisible(false);
+            texto.setText("");
+        };
     }
     
 }

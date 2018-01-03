@@ -9,6 +9,8 @@ import Interfaz.Tablero;
 import com.fazecast.jSerialComm.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
     Descripcion: clase encargada de toda la configuracion para envio y recivo de informacion por el rs232,
@@ -30,13 +32,13 @@ public class ServicioTransmision {
         //COnfiguracion inicial
         puertoEntrada = SerialPort.getCommPorts()[entrada];
         puertoEntrada.setComPortParameters(2400, 8, 0, 1);
-        puertoEntrada.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 1, 1);
+        //puertoEntrada.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 1, 1);
         puertoEntrada.openPort();
         if(entrada!=salida){
             // Los puertos de salida y entrada son diferentes(para realizar pruebas en una sola maquina)
             puertoSalida = SerialPort.getCommPorts()[salida];
             puertoSalida.setComPortParameters(2400, 8, 0, 1);
-            puertoSalida.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 1, 1);
+            //puertoSalida.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 1, 1);
             puertoSalida.openPort(); 
         }
         else{
