@@ -24,6 +24,7 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 /**
  *
@@ -53,6 +54,11 @@ public class Tablero extends javax.swing.JFrame {
      */
     public Tablero(ServicioTransmision s, Boolean jugadorInicial) {
         this.s=s;
+        try{
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        }catch(Exception e){
+            e.printStackTrace();
+        } 
         initComponents();
         Mano.getViewport().setBackground(new Color(33,150,243));
         //PanelMensaje.setVisible(false);
@@ -680,6 +686,7 @@ public class Tablero extends javax.swing.JFrame {
     }
     
     public void escogerColor(){
+        new Thread(new MensajeUI(PanelMensaje,"Escoge un color",4)).start();
         colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png")));
         colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul.png")));
         colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde.png")));
