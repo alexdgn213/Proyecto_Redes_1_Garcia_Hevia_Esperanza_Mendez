@@ -47,6 +47,7 @@ public class MensajeUI implements Runnable{
         }   catch (InterruptedException ex) {
             Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        texto = (JLabel)this.PanelMensaje.getComponent(0);
         if(texto.getText().equals(mensaje)) PanelMensaje.setVisible(false);
     }
     

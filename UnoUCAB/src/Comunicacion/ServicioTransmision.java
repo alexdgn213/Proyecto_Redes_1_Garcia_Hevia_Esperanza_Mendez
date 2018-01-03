@@ -305,10 +305,7 @@ public class ServicioTransmision {
                 return true;
             }
         }
-        
-        
-        return false;
-        
+        return false;  
     }
     
     public void enviarCartaMano(Carta c, String origen,String destino,String sentido){
