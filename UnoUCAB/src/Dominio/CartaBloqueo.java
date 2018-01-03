@@ -35,5 +35,16 @@ public class CartaBloqueo extends Carta{
         else if(this.color.equals("Amarillo")) amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
      }
 
+    @Override
+    public boolean puedeJugar(String colorActual, Carta cartaActual) {
+        if(colorActual.equals(this.color)){
+            return true;
+        }
+        if(cartaActual instanceof CartaBloqueo){
+            return true;
+        }
+        return false;
+    }
+
     
 }

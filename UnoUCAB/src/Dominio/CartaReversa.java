@@ -34,6 +34,17 @@ public class CartaReversa extends Carta{
         else if(this.color.equals("Verde")) verde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde.png")));
         else if(this.color.equals("Amarillo")) amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
     }
+
+    @Override
+    public boolean puedeJugar(String colorActual, Carta cartaActual) {
+        if(colorActual.equals(this.color)){
+            return true;
+        }
+        if(cartaActual instanceof CartaReversa){
+            return true;
+        }
+        return false;
+    }
     
     
 }

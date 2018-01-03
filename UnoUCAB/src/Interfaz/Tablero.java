@@ -348,36 +348,36 @@ public class Tablero extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cartasJugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(numeroJugador2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cartasJugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
+                        .addGap(18, 18, 18)
                         .addComponent(numeroJugador3)))
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(363, 363, 363)
+                        .addComponent(iconoSentido)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(164, 164, 164)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(230, 230, 230)
-                                .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(39, 39, 39)
-                                .addComponent(numeroJugador4)
-                                .addGap(80, 80, 80))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(numeroJugador4)
+                                .addGap(104, 104, 104))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(363, 363, 363)
-                        .addComponent(iconoSentido)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(26, 26, 26))))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(AreaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -386,41 +386,44 @@ public class Tablero extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(101, 101, 101)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cartasJugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(9, 9, 9)
+                                .addGap(112, 112, 112)
+                                .addComponent(numeroJugador4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)))
+                        .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(131, 131, 131))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(101, 101, 101)
+                                .addComponent(cartasJugador3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(111, 111, 111)
                                 .addComponent(numeroJugador3)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(98, 98, 98)
                                 .addComponent(cartasJugador2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(numeroJugador2)
-                                .addGap(59, 59, 59))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cartasJugador4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PanelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(131, 131, 131)))
+                                .addGap(58, 58, 58)))))
                 .addComponent(AreaJugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(79, 79, 79))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addComponent(numeroJugador4))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(39, 39, 39)
+                .addGap(89, 89, 89)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cartaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cartaMazo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
                 .addComponent(iconoSentido)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -701,45 +704,49 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(turno.puedeJugar()){
-                    if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
-                        if(sentido==0){
-                        c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                    if(c.puedeJugar(colorActual, mesa.getCartas().get(mesa.getCartas().size()-1))){
+                        if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
+                            if(sentido==0){
+                            c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                            }
+                            else{
+                                c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                            }
+                            if(c.getColor().equals("Azul")) colorActual = "00";
+                            else if(c.getColor().equals("Verde")) colorActual = "01";
+                            else if(c.getColor().equals("Rojo")) colorActual = "10";
+                            else if(c.getColor().equals("Amarillo")) colorActual = "11";
+                            mesa.getCartas().add(c);
+                            mano.eliminarCarta(c.getCodigo());
+                            esperarTurno();
+                            mostrarTodo();
                         }
-                        else{
-                            c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                        else if(c instanceof CartaReversa){
+                            if(sentido==1){
+                            c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                            }
+                            else{
+                                c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                            }
+                            if(c.getColor().equals("Azul")) colorActual = "00";
+                            else if(c.getColor().equals("Verde")) colorActual = "01";
+                            else if(c.getColor().equals("Rojo")) colorActual = "10";
+                            else if(c.getColor().equals("Amarillo")) colorActual = "11";
+                            mesa.getCartas().add(c);
+                            mano.eliminarCarta(c.getCodigo());
+                            esperarTurno();
+                            mostrarTodo();
                         }
-                        if(c.getColor().equals("Azul")) colorActual = "00";
-                        else if(c.getColor().equals("Verde")) colorActual = "01";
-                        else if(c.getColor().equals("Rojo")) colorActual = "10";
-                        else if(c.getColor().equals("Amarillo")) colorActual = "11";
-                        mesa.getCartas().add(c);
-                        mano.eliminarCarta(c.getCodigo());
-                        esperarTurno();
-                        mostrarTodo();
-                    }
-                    else if(c instanceof CartaReversa){
-                        if(sentido==1){
-                        c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                        else {
+                            escogerColor();
+                            cartaCambio = c;
                         }
-                        else{
-                            c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
-                        }
-                        if(c.getColor().equals("Azul")) colorActual = "00";
-                        else if(c.getColor().equals("Verde")) colorActual = "01";
-                        else if(c.getColor().equals("Rojo")) colorActual = "10";
-                        else if(c.getColor().equals("Amarillo")) colorActual = "11";
-                        mesa.getCartas().add(c);
-                        mano.eliminarCarta(c.getCodigo());
-                        esperarTurno();
-                        mostrarTodo();
-                    }
-                    else {
-                        escogerColor();
-                        cartaCambio = c;
-                    }
-                   
-
                     
+                    
+                    }  
+                    else{
+                        new Thread(new MensajeUI(PanelMensaje,"Carta no válida",4)).start();
+                    }
                 }
                 else{
                     new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();

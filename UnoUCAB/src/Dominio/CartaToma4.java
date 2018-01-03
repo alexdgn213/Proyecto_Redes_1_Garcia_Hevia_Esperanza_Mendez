@@ -31,5 +31,10 @@ public class CartaToma4 extends Carta{
     public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
         s.enviarCartaMano(this, origen,destino,direccion);
     }
+
+    @Override
+    public boolean puedeJugar(String colorActual, Carta cartaActual) {
+        return true;
+    }
     
 }

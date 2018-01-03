@@ -48,6 +48,18 @@ public class CartaSimple extends Carta{
         else if(this.color.equals("Amarillo")) amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
     
     }
+
+    @Override
+    public boolean puedeJugar(String colorActual, Carta cartaActual) {
+        if(colorActual.equals(this.color)){
+            return true;
+        }
+        if(cartaActual instanceof CartaSimple){
+            CartaSimple cartaActual2 = (CartaSimple) cartaActual;
+            if(cartaActual2.numero==this.numero)return true;
+        }
+        return false;
+    }
     
     
    

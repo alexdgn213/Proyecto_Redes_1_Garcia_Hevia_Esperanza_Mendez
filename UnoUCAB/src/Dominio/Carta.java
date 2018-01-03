@@ -74,6 +74,8 @@ public abstract class Carta {
         this.color = color;
     }
     
+    public abstract boolean puedeJugar(String colorActual,Carta cartaActual);
+            
     // Metodo con todo lo que debe hacer cada carta al jugarse
     public abstract void jugar(ServicioTransmision s, String origen, String destino, String direccion,String color);
     

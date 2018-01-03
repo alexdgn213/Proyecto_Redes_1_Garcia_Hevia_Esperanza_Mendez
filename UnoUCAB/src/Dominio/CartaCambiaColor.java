@@ -30,6 +30,11 @@ public class CartaCambiaColor extends Carta{
     @Override
     public void mostrarColor(JLabel rojo, JLabel azul, JLabel verde, JLabel amarillo, String color) {
     }
+
+    @Override
+    public boolean puedeJugar(String colorActual, Carta cartaActual) {
+        return true;
+    }
     
     
 }
