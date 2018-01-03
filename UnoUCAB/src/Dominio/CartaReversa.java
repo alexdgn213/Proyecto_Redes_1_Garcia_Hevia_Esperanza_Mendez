@@ -19,7 +19,7 @@ public class CartaReversa extends Carta{
     }
 
     @Override
-    public void jugar(ServicioTransmision s, String origen, String destino, String direccion) {
+    public void jugar(ServicioTransmision s, String origen, String destino, String direccion,String color) {
         s.enviarCartaMesa(this, origen, destino, direccion);
     }
     

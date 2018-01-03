@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 public class MensajeUI implements Runnable{
     JPanel PanelMensaje;
     int duracion;
+    String mensaje;
+    JLabel texto;
 
     // Parametros: PanelMensaje: panel a mostrar
     //             mensajeL mensaje a mostrar
@@ -25,9 +27,10 @@ public class MensajeUI implements Runnable{
     public MensajeUI(JPanel Panelmensaje, String mensaje, int duracion) {
         this.PanelMensaje = Panelmensaje;
         this.duracion = duracion;
-        JLabel texto = (JLabel)this.PanelMensaje.getComponent(0);
+        texto = (JLabel)this.PanelMensaje.getComponent(0);
         JLabel imagen = (JLabel)this.PanelMensaje.getComponent(1);
         texto.setText(mensaje);
+        this.mensaje = mensaje; 
     }
     
     
@@ -44,7 +47,7 @@ public class MensajeUI implements Runnable{
         }   catch (InterruptedException ex) {
             Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        PanelMensaje.setVisible(false);
+        if(texto.getText().equals(mensaje)) PanelMensaje.setVisible(false);
     }
     
 }

@@ -2,6 +2,9 @@ package Comunicacion;
 
 import Dominio.Baraja;
 import Dominio.Carta;
+import Dominio.CartaBloqueo;
+import Dominio.CartaToma2;
+import Dominio.CartaToma4;
 import Interfaz.Tablero;
 import com.fazecast.jSerialComm.*;
 import java.util.ArrayList;
@@ -64,6 +67,7 @@ public class ServicioTransmision {
         byte[] readBuffer = null; // Bytes para almacenar la informacion
         try {
             //Espero a que algo llegue
+            System.out.println("Esperando mensaje...");
             while (puertoEntrada.bytesAvailable() < 4) {
                 Thread.sleep(20);
             }
@@ -80,9 +84,11 @@ public class ServicioTransmision {
             
             //Una vez aqui debo ver que tipo de instruccion es y decidir que hare
             String byteControl = pasarByteAString(readBuffer[1]);
+            String byteInformacion = pasarByteAString(readBuffer[2]); 
             String instruccion = byteControl.substring(4); // Campo de control
             String origen = byteControl.substring(0,2); // Equipo de Origen
             String destino =  byteControl.substring(2,4); // Equipo de destino
+            t.setSentido(Integer.parseInt(byteInformacion.substring(1, 2)));
             if(instruccion.equals(instruccionCartaMesa)){ 
                 if(!origen.equals(t.getCodigoJugador())){
                     // La informacion enviada es una carta juagada
@@ -245,6 +251,8 @@ public class ServicioTransmision {
         // Obtengo el campoInformacion de dicha carta
         String tipoCarta = campoCarta.substring(4);
         String direccion = campoCarta.substring(1,2);
+        t.setSentido(Integer.parseInt(direccion));
+        String color = campoCarta.substring(2,4);
         // El usuario no paso si no que coloco una carta
         String codigoCarta;
         int num = Integer.parseInt(tipoCarta);
@@ -255,22 +263,50 @@ public class ServicioTransmision {
         // Si es una carta especial solo me importan los ultimos 4 bits
         else codigoCarta = tipoCarta;
         // Quito la carta de la mano del jugador)
-        Carta nuevaCarta=null;
-        if(nuevaCarta==null){
-            nuevaCarta=t.getJugador4().obtenerCarta(codigoCarta);
+        if(tipoCarta.equals("1111")){
+            if(t.getCodigoJugador().equals(destino)){
+                return true;
+            }
+            else{
+                pasarTurno(origen,destino,direccion,color);
+                return false;
+            } 
         }
-        if(nuevaCarta==null){
-            nuevaCarta=t.getJugador2().obtenerCarta(codigoCarta);
+        else{
+            Carta nuevaCarta=null;
+            if(nuevaCarta==null){
+                nuevaCarta=t.getJugador4().obtenerCarta(codigoCarta);
+            }
+            if(nuevaCarta==null){
+                nuevaCarta=t.getJugador2().obtenerCarta(codigoCarta);
+            }
+            if(nuevaCarta==null){
+                nuevaCarta=t.getJugador3().obtenerCarta(codigoCarta);
+            }
+            // la agrego a la mesa
+            if(nuevaCarta!=null){
+                t.getMesa().añadirCarta(nuevaCarta);
+                t.setColorNuevo(color);
+                nuevaCarta.jugar(this, origen, destino, direccion,color);
+            }
+            if(t.getCodigoJugador().equals(destino)){
+                if(nuevaCarta instanceof CartaToma2){
+                    t.obtenerDosCartas();
+                    return false;
+                }
+                else if(nuevaCarta instanceof CartaToma4){
+                    t.obtenerCuatroCartas();
+                    return false;
+                }
+                else if(nuevaCarta instanceof CartaBloqueo){
+                    t.pasar(false);
+                    return false;
+                }
+                return true;
+            }
         }
-        if(nuevaCarta==null){
-            nuevaCarta=t.getJugador3().obtenerCarta(codigoCarta);
-        }
-        // la agrego a la mesa
-        if(nuevaCarta!=null){
-            t.getMesa().añadirCarta(nuevaCarta);
-            nuevaCarta.jugar(this, origen, destino, direccion);
-        }
-        if(t.getCodigoJugador().equals(destino)) return true;
+        
+        
         return false;
         
     }
@@ -325,11 +361,11 @@ public class ServicioTransmision {
     }
     
     // Metodo que envia una el paso de un turno
-    public void pasarTurno(String origen, String destino,String sentido){
+    public void pasarTurno(String origen, String destino,String sentido,String color){
         byte[] envio = new byte[4];
         envio[0] = (byte)Short.parseShort(flag, 2);
         envio[1] = (byte)Short.parseShort(origen+destino+instruccionCartaMesa, 2);
-        envio[2] = (byte)Short.parseShort("1"+sentido+"1111", 2);
+        envio[2] = (byte)Short.parseShort("1"+sentido+color+"1111", 2);
         envio[3] = (byte)Short.parseShort(flag, 2);
         System.out.print("Mensaje enviado: "
                 +" "+pasarByteAString(envio[0])

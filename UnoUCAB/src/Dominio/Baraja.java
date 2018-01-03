@@ -234,23 +234,23 @@ public class Baraja {
         cartas.add(c);
         
         // Cargo todas las cartas Cambia Color
-        c = new CartaCambiaColor("CCA", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
+        c = new CartaCambiaColor("Ëspecial","CCA", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
         cartas.add(c);
-        c = new CartaCambiaColor("CCB", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
+        c = new CartaCambiaColor("Ëspecial","CCB", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
         cartas.add(c);
-        c = new CartaCambiaColor("CCC", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
+        c = new CartaCambiaColor("Ëspecial","CCC", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
         cartas.add(c);
-        c = new CartaCambiaColor("CCD", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
+        c = new CartaCambiaColor("Ëspecial","CCD", "/Interfaz/Imagenes/Cartas/CC.png", "1101");
         cartas.add(c);
         
         // Cargo todas las cartas +4
-        c = new CartaToma4("+4A", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
+        c = new CartaToma4("Ëspecial","+4A", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4B", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
+        c = new CartaToma4("Ëspecial","+4B", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4C", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
+        c = new CartaToma4("Ëspecial","+4C", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
-        c = new CartaToma4("+4D", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
+        c = new CartaToma4("Ëspecial","+4D", "/Interfaz/Imagenes/Cartas/+4.png", "1110");
         cartas.add(c);
     }
     

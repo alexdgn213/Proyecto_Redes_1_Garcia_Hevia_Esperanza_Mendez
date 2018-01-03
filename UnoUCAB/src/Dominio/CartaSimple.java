@@ -20,7 +20,7 @@ public class CartaSimple extends Carta{
         this.numero = numero;
     }
     
-    public void jugar(ServicioTransmision s, String origen, String destino, String direccion){
+    public void jugar(ServicioTransmision s, String origen, String destino, String direccion,String color){
         // AL ser una carta simple debe primedo comprobarse si se puede jugar(PENDIENTE) y luego se envia
         s.enviarCartaMesa(this, origen,destino,direccion);
     

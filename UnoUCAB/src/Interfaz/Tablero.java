@@ -8,10 +8,14 @@ package Interfaz;
 import Comunicacion.ServicioTransmision;
 import Dominio.Baraja;
 import Dominio.Carta;
+import Dominio.CartaCambiaColor;
+import Dominio.CartaReversa;
 import Dominio.CartaSimple;
+import Dominio.CartaToma4;
 import Dominio.Turno;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,13 +39,15 @@ public class Tablero extends javax.swing.JFrame {
     Baraja jugador3; // Cartas que tiene el jugador 3 (Verde)
     Baraja jugador4; // Cartas que tiene el jugador 4 (Rojo)
     int sentido; //Sentido del juego 0:en reloj, 1:en contrareloj 
-    String colorNuevo; //Cuando se juega un +4 o un cambia color aqui se almacena el nuevo colot
+    String colorActual; //Cuando se juega un +4 o un cambia color aqui se almacena el nuevo colot
     String jugadorSiguiente;
     String jugadorAnterior;
     String jugadorExtra;
     Turno turno; //Permite determinar si es el turno del jugador y ejecutar la espera por los demas jugadores
     String codigoJugador; // Contiene el codigo del jugador actual
-
+    Carta cartaCambio;
+    Boolean puedeCambiarColor;
+    Boolean puedeSacar;
     /**
      * Creates new form Tablero
      */
@@ -58,8 +64,10 @@ public class Tablero extends javax.swing.JFrame {
         jugador4 = new Baraja();
         mazo.llenarMazo();
         mazo.barajear();
-        colorNuevo= "Rojo"; //Temporal
+        colorActual= "";
         turno = new Turno(this,PanelMensaje);
+        puedeCambiarColor= false; 
+        puedeSacar = true;
         if(jugadorInicial){
             new Thread(new MensajeUI(PanelMensaje,"Se ha iniciado la partida",4)).start();
             turno.setPuedeJugar(true);
@@ -120,6 +128,7 @@ public class Tablero extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1280, 720));
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setOpaque(false);
@@ -216,12 +225,32 @@ public class Tablero extends javax.swing.JFrame {
         Mano.setViewportView(PanelMano);
 
         colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png"))); // NOI18N
+        colorRojo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorRojoMouseClicked(evt);
+            }
+        });
 
         colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul2.png"))); // NOI18N
+        colorAzul.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorAzulMouseClicked(evt);
+            }
+        });
 
         colorAmarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo2.png"))); // NOI18N
+        colorAmarillo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorAmarilloMouseClicked(evt);
+            }
+        });
 
         colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde2.png"))); // NOI18N
+        colorVerde.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorVerdeMouseClicked(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Iconos/ic_block_white_24dp_1x.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -411,10 +440,17 @@ public class Tablero extends javax.swing.JFrame {
 
     private void cartaMazoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartaMazoMouseClicked
         if(turno.puedeJugar()){
-            Carta c=mazo.obtenerCarta();
-            c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
-            mano.añadirCarta(c);
-            mostrarTodo();
+            if(puedeSacar){
+                Carta c=mazo.obtenerCarta();
+                c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
+                mano.añadirCarta(c);
+                mostrarTodo(); 
+                puedeSacar=false;
+            }
+            else{
+                new Thread(new MensajeUI(PanelMensaje,"Ya tomaste una carta",4)).start();
+            }
+            
         }
         else{
             new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
@@ -423,20 +459,76 @@ public class Tablero extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         if(turno.puedeJugar()){
-            if(sentido==0){
-                s.pasarTurno(codigoJugador,jugadorSiguiente, "0");
-            }
-            else{
-                s.pasarTurno(codigoJugador,jugadorAnterior, "1");
-            }
-            esperarTurno();
-            mostrarTodo();
-            new Thread(new MensajeUI(PanelMensaje,"Pasaste",4)).start();
+            pasar(true);
         }
         else{
             new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
         }
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void colorAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorAzulMouseClicked
+        if(puedeCambiarColor){
+            if(sentido==0){
+            cartaCambio.jugar(s,codigoJugador,jugadorSiguiente,"0","00");
+            }
+            else{
+                cartaCambio.jugar(s,codigoJugador,jugadorAnterior,"1","00");
+            }
+            colorActual = "00";
+            mesa.getCartas().add(cartaCambio);
+            mano.eliminarCarta(cartaCambio.getCodigo());
+            esperarTurno();
+            mostrarTodo();
+        }  
+    }//GEN-LAST:event_colorAzulMouseClicked
+
+    private void colorVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorVerdeMouseClicked
+        if(puedeCambiarColor){
+            if(sentido==0){
+            cartaCambio.jugar(s,codigoJugador,jugadorSiguiente,"0","01");
+            }
+            else{
+                cartaCambio.jugar(s,codigoJugador,jugadorAnterior,"1","01");
+            }
+            colorActual = "01";
+            mesa.getCartas().add(cartaCambio);
+            mano.eliminarCarta(cartaCambio.getCodigo());
+            esperarTurno();
+            mostrarTodo();
+        } 
+    }//GEN-LAST:event_colorVerdeMouseClicked
+
+    private void colorRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorRojoMouseClicked
+        if(puedeCambiarColor){
+            if(sentido==0){
+            cartaCambio.jugar(s,codigoJugador,jugadorSiguiente,"0","10");
+            }
+            else{
+                cartaCambio.jugar(s,codigoJugador,jugadorAnterior,"1","10");
+            }
+            colorActual = "10";
+            mesa.getCartas().add(cartaCambio);
+            mano.eliminarCarta(cartaCambio.getCodigo());
+            esperarTurno();
+            mostrarTodo();
+        } 
+    }//GEN-LAST:event_colorRojoMouseClicked
+
+    private void colorAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorAmarilloMouseClicked
+        if(puedeCambiarColor){
+            if(sentido==0){
+            cartaCambio.jugar(s,codigoJugador,jugadorSiguiente,"0","11");
+            }
+            else{
+                cartaCambio.jugar(s,codigoJugador,jugadorAnterior,"1","11");
+            }
+            colorActual = "11";
+            mesa.getCartas().add(cartaCambio);
+            mano.eliminarCarta(cartaCambio.getCodigo());
+            esperarTurno();
+            mostrarTodo();
+        } 
+    }//GEN-LAST:event_colorAmarilloMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AreaJugador;
@@ -486,8 +578,12 @@ public class Tablero extends javax.swing.JFrame {
                         Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     // Por ahora siempre el primer turno es del siguiente(problemas con el envio de yo a yo y con la posibilidad de varios juhadores)
-                    c.jugar(s, codigoJugador, jugadorSiguiente, String.valueOf(sentido));
+                    c.jugar(s, codigoJugador, jugadorSiguiente, String.valueOf(sentido),colorActual);
                     mesa.añadirCarta(c);
+                    if(c.getColor().equals("Azul")) colorActual = "00";
+                    else if(c.getColor().equals("Verde")) colorActual = "01";
+                    else if(c.getColor().equals("Rojo")) colorActual = "10";
+                    else if(c.getColor().equals("Amarillo")) colorActual = "11";
                     listo=true;
                 }
                 else{
@@ -515,9 +611,76 @@ public class Tablero extends javax.swing.JFrame {
 
     }
     
+    public void obtenerDosCartas(){     
+        Carta nuevaCarta;
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        pasar(false);
+    }
+    
+    public void obtenerCuatroCartas(){     
+        Carta nuevaCarta;
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        nuevaCarta = mazo.obtenerCarta();
+        if(nuevaCarta!=null){
+            nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
+            mano.añadirCarta(nuevaCarta);
+        }
+        pasar(false);
+    }
+    
+    public void pasar(boolean voluntario) {
+        if(sentido==0){
+            s.pasarTurno(codigoJugador,jugadorSiguiente, "0",colorActual);
+        }
+        else{
+            s.pasarTurno(codigoJugador,jugadorAnterior, "1",colorActual);
+        }
+        esperarTurno();
+        mostrarTodo();
+        if(voluntario){
+            new Thread(new MensajeUI(PanelMensaje,"Pasaste",4)).start();
+        } 
+
+        else {
+            new Thread(new MensajeUI(PanelMensaje,"Perdiste el turno",4)).start();
+        }
+    }
+    
     public void esperarTurno(){
+        puedeSacar= true;
         new Thread(turno).start();
     }
+    
+    public void escogerColor(){
+        colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png")));
+        colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul.png")));
+        colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde.png")));
+        colorAmarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
+        puedeCambiarColor = true;
+        }
     
     // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
@@ -530,48 +693,75 @@ public class Tablero extends javax.swing.JFrame {
         SequentialGroup sg = PanelManoLayout.createSequentialGroup();
         sg.addGap(10,10,10);
         ParallelGroup pg = PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING);
-        for (Carta c: mano.getCartas()){
+        Baraja temporal = mano;
+        ArrayList<JLabel> labelsCartas = new ArrayList<JLabel>();
+        for (Carta c: temporal.getCartas()){
             javax.swing.JLabel nuevaCarta = new javax.swing.JLabel();
             nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(turno.puedeJugar()){
-                    if(sentido==0){
-                        c.jugar(s,codigoJugador,jugadorSiguiente,"0");
+                    if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
+                        if(sentido==0){
+                        c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                        }
+                        else{
+                            c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                        }
+                        if(c.getColor().equals("Azul")) colorActual = "00";
+                        else if(c.getColor().equals("Verde")) colorActual = "01";
+                        else if(c.getColor().equals("Rojo")) colorActual = "10";
+                        else if(c.getColor().equals("Amarillo")) colorActual = "11";
+                        mesa.getCartas().add(c);
+                        mano.eliminarCarta(c.getCodigo());
+                        esperarTurno();
+                        mostrarTodo();
                     }
-                    else{
-                        c.jugar(s,codigoJugador,jugadorAnterior,"1");
+                    else if(c instanceof CartaReversa){
+                        if(sentido==1){
+                        c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                        }
+                        else{
+                            c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                        }
+                        if(c.getColor().equals("Azul")) colorActual = "00";
+                        else if(c.getColor().equals("Verde")) colorActual = "01";
+                        else if(c.getColor().equals("Rojo")) colorActual = "10";
+                        else if(c.getColor().equals("Amarillo")) colorActual = "11";
+                        mesa.getCartas().add(c);
+                        mano.eliminarCarta(c.getCodigo());
+                        esperarTurno();
+                        mostrarTodo();
                     }
-                    mesa.getCartas().add(c);
-                    mano.eliminarCarta(c.getCodigo());
-                    esperarTurno();
-                    mostrarTodo();
+                    else {
+                        escogerColor();
+                        cartaCambio = c;
+                    }
+                   
+
+                    
                 }
                 else{
                     new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
                 }
             }
             });
+            labelsCartas.add(nuevaCarta);
+        }
+        for(JLabel nuevaCarta : labelsCartas){
             sg.addComponent(nuevaCarta);
             sg.addGap(6, 6, 6);
-            pg.addComponent(nuevaCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE);
-            
         }
-       
+        Collections.reverse(labelsCartas);
+        for(JLabel nuevaCarta : labelsCartas){
+            pg.addComponent(nuevaCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE);
+        }
+        PanelManoLayout.setVerticalGroup(pg);
+        PanelManoLayout.setHorizontalGroup(sg);
         
-        PanelManoLayout.setVerticalGroup(
-            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelManoLayout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(pg))
-        );
-        PanelManoLayout.setHorizontalGroup(
-            PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sg)
-        );
         }
         catch (Exception e){
-        
+            System.out.println("hubo problemas");
         }
     }
     
@@ -603,8 +793,7 @@ public class Tablero extends javax.swing.JFrame {
         }
         else{
             imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/Cartas+.png"))); 
-        }
-        
+        }     
     }
     
     public void mostrarOtrosJugadores(){
@@ -641,14 +830,16 @@ public class Tablero extends javax.swing.JFrame {
     }
     // Muestra el color actual en la paleta inferior
     public void mostrarColor(){
+        puedeCambiarColor=false;
         colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo2.png")));
         colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul2.png")));
         colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde2.png")));
         colorAmarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo2.png")));
-        if(mesa.getCartas().size()>0){
-            Carta c = mesa.getCartas().get(mesa.getCartas().size()-1);
-            c.mostrarColor(colorRojo, colorAzul, colorVerde, colorAmarillo,colorNuevo);
-            }
+        if(colorActual.equals("00")) colorAzul.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAzul.png")));
+        else if(colorActual.equals("01")) colorVerde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCVerde.png")));
+        else if(colorActual.equals("10")) colorRojo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCRojo.png")));
+        else if(colorActual.equals("11")) colorAmarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/Imagenes/CCAmarillo.png")));
+        
         }
     
     // Muestra el sentido actual
@@ -671,9 +862,7 @@ public class Tablero extends javax.swing.JFrame {
        }
         else{
             cartaActual.setIcon(null);
-        }
-       
-        
+        }        
     }
     
     //Actualiza la interfaz con todos los cambios
@@ -684,7 +873,7 @@ public class Tablero extends javax.swing.JFrame {
             mostrarColor();
             mostrarSentido();
             mostrarOtrosJugadores();
-            mostrarCartasJugadores();
+            //mostrarCartasJugadores();
             pack();
         }
         catch(Exception e) {}
@@ -780,11 +969,11 @@ public class Tablero extends javax.swing.JFrame {
     }
 
     public String getColorNuevo() {
-        return colorNuevo;
+        return colorActual;
     }
 
     public void setColorNuevo(String colorNuevo) {
-        this.colorNuevo = colorNuevo;
+        this.colorActual = colorNuevo;
     }
 
     public String getJugadorSiguiente() {
@@ -810,6 +999,8 @@ public class Tablero extends javax.swing.JFrame {
     public void setJugadorExtra(String jugadorExtra) {
         this.jugadorExtra = jugadorExtra;
     }
+
+    
     
     
     

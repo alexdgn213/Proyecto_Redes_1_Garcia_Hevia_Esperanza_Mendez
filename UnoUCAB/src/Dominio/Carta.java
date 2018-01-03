@@ -65,9 +65,17 @@ public abstract class Carta {
     public void setCampoInformacion(String campoInformacion) {
         this.campoInformacion = campoInformacion;
     }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
     
     // Metodo con todo lo que debe hacer cada carta al jugarse
-    public abstract void jugar(ServicioTransmision s, String origen, String destino, String direccion);
+    public abstract void jugar(ServicioTransmision s, String origen, String destino, String direccion,String color);
     
     // Metodo con todo lo que debe hacer cada carta al jugarse
     public abstract void sacar(ServicioTransmision s, String origen, String destino, String direccion);

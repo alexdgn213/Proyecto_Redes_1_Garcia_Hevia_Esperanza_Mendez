@@ -14,12 +14,13 @@ import javax.swing.JLabel;
  */
 public class CartaToma4 extends Carta{
 
-    public CartaToma4(String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion);
+    public CartaToma4(String color, String codigo, String imagen, String campoInformacion) {
+        super(codigo, imagen, campoInformacion,color);
     }
 
     @Override
-    public void jugar(ServicioTransmision s, String origen, String destino, String direccion) {
+    public void jugar(ServicioTransmision s, String origen, String destino, String direccion, String color) {
+        this.campoInformacion=color+this.campoInformacion;
         s.enviarCartaMesa(this, origen, destino, direccion);
     }
 
