@@ -50,6 +50,7 @@ public class Tablero extends javax.swing.JFrame {
     Boolean puedeCambiarColor;
     Boolean puedeSacar;
     Boolean turnoExtra;
+    Boolean yaIniciado;
     /**
      * Creates new form Tablero
      */
@@ -61,6 +62,7 @@ public class Tablero extends javax.swing.JFrame {
             e.printStackTrace();
         } 
         initComponents();
+        yaIniciado=false;
         Mano.getViewport().setBackground(new Color(33,150,243));
         //PanelMensaje.setVisible(false);
         mano = new Baraja();
@@ -81,12 +83,12 @@ public class Tablero extends javax.swing.JFrame {
             codigoJugador="00";
             jugadorSiguiente="01";
             s.IniciarPartida();
-            new Thread(turno).start();
+            esperarTurno();
             //obtenerPrimeraCarta(); // Temporal
         }
         else{
             codigoJugador="01";
-            new Thread(turno).start();
+            esperarTurno();
         }
         mostrarTodo();
     }
@@ -443,13 +445,13 @@ public class Tablero extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cartaMazoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartaMazoMouseClicked
+        yaIniciado=true;
         if(turno.puedeJugar()){
             if(puedeSacar){
                 Carta c=mazo.obtenerCarta();
                 c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
                 mano.añadirCarta(c);
                 mostrarTodo();
-                turnoExtra = true;
                 puedeSacar=false;
             }
             else{
@@ -619,8 +621,9 @@ public class Tablero extends javax.swing.JFrame {
                 }
             }
             s.anunciarTomarCartas(codigoJugador, jugadorSiguiente, String.valueOf(sentido));
+            esperarTurno();
         }        
-
+        
     }
     
     public void obtenerDosCartas(){     
@@ -635,6 +638,7 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        
         pasar(false);
     }
     
@@ -664,12 +668,6 @@ public class Tablero extends javax.swing.JFrame {
     }
     
     public void pasar(boolean voluntario) {
-        /*
-        try{Thread.sleep(2000);
-        }   catch (InterruptedException ex) {
-            Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
         if(sentido==0){
             s.pasarTurno(codigoJugador,jugadorSiguiente, "0",colorActual);
         }
@@ -689,7 +687,7 @@ public class Tablero extends javax.swing.JFrame {
     
     public void esperarTurno(){
         puedeSacar= true;
-        new Thread(turno).start();
+        turno.esperar();
     }
     
     public void escogerColor(){
@@ -892,7 +890,7 @@ public class Tablero extends javax.swing.JFrame {
             mostrarColor();
             mostrarSentido();
             mostrarOtrosJugadores();
-            mostrarCartasJugadores();
+            //mostrarCartasJugadores();
             pack();
         }
         catch(Exception e) {}
@@ -1019,6 +1017,15 @@ public class Tablero extends javax.swing.JFrame {
         this.jugadorExtra = jugadorExtra;
     }
 
+    public Boolean getYaIniciado() {
+        return yaIniciado;
+    }
+
+    public void setYaIniciado(Boolean yaIniciado) {
+        this.yaIniciado = yaIniciado;
+    }
+
+    
     
     
     

@@ -23,6 +23,7 @@ public class Turno implements Runnable{
     Tablero t; // Es necesario para manejar los datos del tablero
     String codigoJugador; // Contiene el codigo del jugador actual
     JPanel panelMensaje;
+    boolean enUso=false;
 
     public Turno( Tablero t, JPanel panelMensaje) {
         this.puedeJugar = false;
@@ -35,6 +36,7 @@ public class Turno implements Runnable{
     // Una vez terminado es turno del jugador
     @Override
     public void run() {
+        enUso=false;
         this.puedeJugar=false; // QUito el turno al jugador
         new Thread(new MensajeUI(panelMensaje,"Esperando el turno",1)).start();
         // MIentras no sea el turno del jugador
@@ -47,6 +49,13 @@ public class Turno implements Runnable{
             t.mostrarTodo();
         } 
         new Thread(new MensajeUI(panelMensaje,"Es tu turno!",4)).start();
+        enUso=false;
+    }
+    
+    public void esperar(){
+        if(!enUso){
+            new Thread(this).start();
+        }
     }
 
     public boolean puedeJugar() {

@@ -92,6 +92,7 @@ public class ServicioTransmision {
             String destino =  byteControl.substring(2,4); // Equipo de destino
             t.setSentido(Integer.parseInt(byteInformacion.substring(1, 2)));
             if(instruccion.equals(instruccionCartaMesa)){ 
+                System.out.println("Carta a la mesa");
                 if(!origen.equals(t.getCodigoJugador())){
                     // La informacion enviada es una carta juagada
                     return nuevaCartaMesa(t,origen,destino,readBuffer[2]);
@@ -101,16 +102,19 @@ public class ServicioTransmision {
                 }
             }
             else if(instruccion.equals(instruccionCartaMano)){  
+                System.out.println("Carta a la mano");
                 if(!origen.equals(t.getCodigoJugador())){
                     // La informacion enviada es una carta tomada del mazo
                     return nuevaCartaMano(t,origen,destino,readBuffer[2]);
                 }
                 else{
-                    return false;
+                    return t.getYaIniciado() && true;
                 }
             }
             else if(instruccion.equals(instruccionCartasIniciales)){  
+               System.out.println("Cartas iniciales"); 
                 if(!origen.equals(t.getCodigoJugador())){
+                    
                     if(destino.equals(t.getCodigoJugador())){
                         t.obtenerCartasPropias();
                     }
@@ -124,6 +128,7 @@ public class ServicioTransmision {
                 return false;
             }
             else if(instruccion.equals(instruccionInicio)){
+                System.out.println("Insturccion de inicio");
                 // La informacion enviada es sobre el inicio de la partida
                 String informacion = pasarByteAString(readBuffer[2]);
                 String modo = informacion.substring(5,6);
@@ -360,7 +365,6 @@ public class ServicioTransmision {
             else if(origen.equals(t.getJugadorExtra())){
                 t.getJugador3().añadirCarta(nuevaCarta);
             }
-            
         }
         return false;
         
