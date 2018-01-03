@@ -20,8 +20,10 @@ public class CartaToma4 extends Carta{
 
     @Override
     public void jugar(ServicioTransmision s, String origen, String destino, String direccion, String color) {
+        String temp = this.campoInformacion;
         this.campoInformacion=color+this.campoInformacion;
         s.enviarCartaMesa(this, origen, destino, direccion);
+        this.campoInformacion=temp;
     }
 
     @Override
@@ -29,7 +31,10 @@ public class CartaToma4 extends Carta{
     }
     
     public void sacar(ServicioTransmision s, String origen, String destino, String direccion){
+        String temp = this.campoInformacion;
+        this.campoInformacion="00"+this.campoInformacion;
         s.enviarCartaMano(this, origen,destino,direccion);
+        this.campoInformacion=temp;
     }
 
     @Override
