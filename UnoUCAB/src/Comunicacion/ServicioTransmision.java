@@ -105,7 +105,7 @@ public class ServicioTransmision {
                     // La informacion enviada es una carta tomada del mazo
                     return nuevaCartaMano(t,origen,destino,readBuffer[2]);
                 }
-                else{ 
+                else{
                     return false;
                 }
             }
@@ -276,14 +276,20 @@ public class ServicioTransmision {
         }
         else{
             Carta nuevaCarta=null;
-            if(nuevaCarta==null){
-                nuevaCarta=t.getJugador4().obtenerCarta(codigoCarta);
+            if(origen.equals(t.getJugadorSiguiente())){
+                if(nuevaCarta==null){
+                    nuevaCarta=t.getJugador2().obtenerCarta(codigoCarta);
+                }
             }
-            if(nuevaCarta==null){
-                nuevaCarta=t.getJugador2().obtenerCarta(codigoCarta);
+            else if(origen.equals(t.getJugadorAnterior())){
+                if(nuevaCarta==null){
+                    nuevaCarta=t.getJugador4().obtenerCarta(codigoCarta);
+                }
             }
-            if(nuevaCarta==null){
-                nuevaCarta=t.getJugador3().obtenerCarta(codigoCarta);
+            else if(origen.equals(t.getJugadorExtra())){
+                if(nuevaCarta==null){
+                    nuevaCarta=t.getJugador3().obtenerCarta(codigoCarta);
+                }
             }
             // la agrego a la mesa
             if(nuevaCarta!=null){
@@ -341,17 +347,18 @@ public class ServicioTransmision {
         else codigoCarta = tipoCarta;
         // Quito la carta del mazo
         Carta nuevaCarta=t.getMazo().obtenerCarta(codigoCarta);
+        
         // La agrego a su correspondiente jugador
         if(nuevaCarta!=null){
-            enviarCartaMano(nuevaCarta,origen,destino,direccion);
+            nuevaCarta.sacar(this, origen, destino, direccion);
             if(origen.equals(t.getJugadorSiguiente())){
                 t.getJugador2().añadirCarta(nuevaCarta);
             }
-            else if(origen.equals(t.getJugadorExtra())){
-                t.getJugador3().añadirCarta(nuevaCarta);
-            }
             else if(origen.equals(t.getJugadorAnterior())){
                 t.getJugador4().añadirCarta(nuevaCarta);
+            }
+            else if(origen.equals(t.getJugadorExtra())){
+                t.getJugador3().añadirCarta(nuevaCarta);
             }
             
         }

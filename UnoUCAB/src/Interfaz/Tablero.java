@@ -49,6 +49,7 @@ public class Tablero extends javax.swing.JFrame {
     Carta cartaCambio;
     Boolean puedeCambiarColor;
     Boolean puedeSacar;
+    Boolean turnoExtra;
     /**
      * Creates new form Tablero
      */
@@ -134,7 +135,6 @@ public class Tablero extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1269, 709));
-        setMinimumSize(new java.awt.Dimension(0, 0));
         setPreferredSize(new java.awt.Dimension(1269, 709));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -449,6 +449,7 @@ public class Tablero extends javax.swing.JFrame {
                 c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
                 mano.añadirCarta(c);
                 mostrarTodo();
+                turnoExtra = true;
                 puedeSacar=false;
             }
             else{
@@ -463,7 +464,13 @@ public class Tablero extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         if(turno.puedeJugar()){
-            pasar(true);
+            if(!puedeSacar){
+                pasar(true);
+            }
+            else{
+                new Thread(new MensajeUI(PanelMensaje,"Debes tomar una carta",4)).start();
+            }
+            
         }
         else{
             new Thread(new MensajeUI(PanelMensaje,"Aun no es tu turno",4)).start();
@@ -712,7 +719,8 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if(turno.puedeJugar()){
+                if(turno.puedeJugar()||turnoExtra){
+                    turnoExtra=false;
                     if(c.puedeJugar(colorActual, mesa.getCartas().get(mesa.getCartas().size()-1))){
                         if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
                             if(sentido==0){
@@ -830,10 +838,11 @@ public class Tablero extends javax.swing.JFrame {
             System.out.print(c.getCodigo()+" ");
         }
         System.out.print("\nMesa: ");
-        for(Carta c : jugador4.getCartas()){
+        for(Carta c : mesa.getCartas()){
             System.out.print(c.getCodigo()+" ");
         }
-        for(Carta c : mesa.getCartas()){
+        System.out.print("\nMazo: ");
+        for(Carta c : mazo.getCartas()){
             System.out.print(c.getCodigo()+" ");
         }
         System.out.print("\n");
@@ -883,7 +892,7 @@ public class Tablero extends javax.swing.JFrame {
             mostrarColor();
             mostrarSentido();
             mostrarOtrosJugadores();
-            //mostrarCartasJugadores();
+            mostrarCartasJugadores();
             pack();
         }
         catch(Exception e) {}
