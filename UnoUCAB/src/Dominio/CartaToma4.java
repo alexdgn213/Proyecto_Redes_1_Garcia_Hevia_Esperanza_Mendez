@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 public class CartaToma4 extends Carta{
 
     public CartaToma4(String color, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion,color);
+        super(codigo, imagen, campoInformacion,color,50);
     }
 
     @Override

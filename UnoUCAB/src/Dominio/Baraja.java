@@ -293,6 +293,14 @@ public class Baraja {
     public void añadirCarta(Carta c){
         cartas.add(c);
     }
+    
+    public int sumarPuntaje(){
+        int resultado =0;
+        for(Carta c : cartas){
+            resultado+=c.getPuntaje();
+        }
+        return resultado;
+    }
 
     public List<Carta> getCartas() {
         return cartas;

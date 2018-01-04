@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 public class CartaReversa extends Carta{
 
     public CartaReversa(String color, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion,color);
+        super(codigo, imagen, campoInformacion,color,20);
     }
 
     @Override

@@ -712,7 +712,11 @@ public class Tablero extends javax.swing.JFrame {
     public void intentarGanar(){
         if(mano.getCartas().size()==0){
             s.anunciarVictoria(codigoJugador, String.valueOf(sentido));
-            Fin pantallaNueva = new Fin(true,1000);
+            int resultado = 0;
+            resultado += jugador2.sumarPuntaje();
+            resultado += jugador3.sumarPuntaje();
+            resultado += jugador4.sumarPuntaje();
+            Fin pantallaNueva = new Fin(true,resultado);
             this.dispose();
             pantallaNueva.setVisible(true);
         }

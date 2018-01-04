@@ -24,6 +24,7 @@ public abstract class Carta {
                              //    - Si es de color se guardan 6 bits incluyendo el color;
                              //    - Si es especial solo se guardan 4 bits y los demas se agrega al jugar(el color al que se cambiara)
     String color;
+    int puntaje;
     
     public Carta(String codigo, String imagen, String campoInformacion) {
         this.codigo = codigo;
@@ -31,11 +32,12 @@ public abstract class Carta {
         this.campoInformacion = campoInformacion;
     }
 
-    public Carta(String codigo, String imagen, String campoInformacion, String color) {
+    public Carta(String codigo, String imagen, String campoInformacion, String color,int puntaje) {
         this.codigo = codigo;
         this.imagen = imagen;
         this.campoInformacion = campoInformacion;
         this.color = color;
+        this.puntaje = puntaje;
     }
 
     
@@ -73,6 +75,16 @@ public abstract class Carta {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+    
+    
     
     public abstract boolean puedeJugar(String colorActual,Carta cartaActual);
             

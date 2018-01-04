@@ -16,7 +16,7 @@ public class CartaSimple extends Carta{
     int numero;
 
     public CartaSimple(String color, int numero, String codigo, String imagen, String campoInformacion) {
-        super(codigo, imagen, campoInformacion,color);
+        super(codigo, imagen, campoInformacion,color,numero);
         this.numero = numero;
     }
     
