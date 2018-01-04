@@ -445,14 +445,15 @@ public class Tablero extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cartaMazoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartaMazoMouseClicked
-        yaIniciado=true;
         if(turno.puedeJugar()){
             if(puedeSacar){
+                puedeSacar=false;
+                s.setPasarLuego(true);
                 Carta c=mazo.obtenerCarta();
                 c.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido));
                 mano.añadirCarta(c);
                 mostrarTodo();
-                puedeSacar=false;
+                esperarTurno();
             }
             else{
                 new Thread(new MensajeUI(PanelMensaje,"Ya tomaste una carta",4)).start();
@@ -467,6 +468,7 @@ public class Tablero extends javax.swing.JFrame {
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         if(turno.puedeJugar()){
             if(!puedeSacar){
+                puedeSacar= true;
                 pasar(true);
             }
             else{
@@ -611,6 +613,7 @@ public class Tablero extends javax.swing.JFrame {
     
     // Obtiene las 7 cartas del juagdor y las envia(PENDIENTE)
     public void obtenerCartasPropias(){
+        s.setPasarLuego(false);
         if(mano.getCartas().size()==0){
             while(mano.getCartas().size()<7){      
                 Carta nuevaCarta;
@@ -626,44 +629,51 @@ public class Tablero extends javax.swing.JFrame {
         
     }
     
-    public void obtenerDosCartas(){     
+    public void obtenerDosCartas(){   
+        s.setPasarLuego(false);
         Carta nuevaCarta;
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        esperarTurno();
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
-        
+        esperarTurno();
         pasar(false);
     }
     
-    public void obtenerCuatroCartas(){     
+    public void obtenerCuatroCartas(){ 
+        s.setPasarLuego(false);
         Carta nuevaCarta;
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        esperarTurno();
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        esperarTurno();
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        esperarTurno();
         nuevaCarta = mazo.obtenerCarta();
         if(nuevaCarta!=null){
             nuevaCarta.sacar(s, codigoJugador, codigoJugador, String.valueOf(sentido) );
             mano.añadirCarta(nuevaCarta);
         }
+        esperarTurno();
         pasar(false);
     }
     
@@ -686,7 +696,6 @@ public class Tablero extends javax.swing.JFrame {
     }
     
     public void esperarTurno(){
-        puedeSacar= true;
         turno.esperar();
     }
     
@@ -718,7 +727,7 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(turno.puedeJugar()||turnoExtra){
-                    turnoExtra=false;
+                    puedeSacar= true;
                     if(c.puedeJugar(colorActual, mesa.getCartas().get(mesa.getCartas().size()-1))){
                         if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
                             if(sentido==0){

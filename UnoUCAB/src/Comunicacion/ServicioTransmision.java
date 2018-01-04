@@ -27,6 +27,7 @@ public class ServicioTransmision {
     String instruccionCartaMano = "0110";
     String instruccionInicio = "0001";
     String instruccionCartasIniciales = "0010";
+    Boolean pasarLuego;
 
     public ServicioTransmision(int entrada, int salida) {    
         //COnfiguracion inicial
@@ -45,6 +46,7 @@ public class ServicioTransmision {
             // COnfiguracion real
             puertoSalida=puertoEntrada;
         }
+        pasarLuego=false;
     }
    
     // genera la lista de los puertos disponibles
@@ -108,7 +110,7 @@ public class ServicioTransmision {
                     return nuevaCartaMano(t,origen,destino,readBuffer[2]);
                 }
                 else{
-                    return t.getYaIniciado() && true;
+                    return pasarLuego;
                 }
             }
             else if(instruccion.equals(instruccionCartasIniciales)){  
@@ -450,4 +452,15 @@ public class ServicioTransmision {
         }
         
     }
+
+    public Boolean getPasarLuego() {
+        return pasarLuego;
+    }
+
+    public void setPasarLuego(Boolean pasarLuego) {
+        this.pasarLuego = pasarLuego;
+    }
+
+    
+    
 }
