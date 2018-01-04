@@ -27,6 +27,7 @@ public class ServicioTransmision {
     String instruccionCartaMano = "0110";
     String instruccionInicio = "0001";
     String instruccionCartasIniciales = "0010";
+    String instruccionVictoria = "0011";
     Boolean pasarLuego;
 
     public ServicioTransmision(int entrada, int salida) {    
@@ -163,6 +164,15 @@ public class ServicioTransmision {
                     }
                 }
                 
+            }
+            else if(instruccion.equals(instruccionVictoria)){  
+               System.out.println("Victoria"); 
+                if(!origen.equals(t.getCodigoJugador())){
+                    t.perder();
+                    anunciarVictoria(origen,String.valueOf(t.getSentido()));
+                    return false;
+                }
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -388,6 +398,21 @@ public class ServicioTransmision {
         puertoSalida.writeBytes(envio, envio.length);
     }
     
+    public void anunciarVictoria(String origen,String sentido){
+        byte[] envio = new byte[4];
+        envio[0] = (byte)Short.parseShort(flag, 2);
+        envio[1] = (byte)Short.parseShort(origen+origen+instruccionVictoria, 2);
+        envio[2] = (byte)Short.parseShort("1"+sentido+"000000", 2);
+        envio[3] = (byte)Short.parseShort(flag, 2);
+        System.out.print("Mensaje enviado: "
+                +" "+pasarByteAString(envio[0])
+                +" "+pasarByteAString(envio[1])
+                +" "+pasarByteAString(envio[2])
+                +" "+pasarByteAString(envio[3])
+                +"\n");
+        puertoSalida.writeBytes(envio, envio.length);
+    }
+    
     //COnvierte un Byte en un string(para poder comparar) 
     public String pasarByteAString(byte b){
         String retorno = Integer.toBinaryString(b & 0xFF);
@@ -395,6 +420,7 @@ public class ServicioTransmision {
         while(retorno.length()<8) retorno = "0" + retorno;
         return retorno;
     }
+    
     
     //Asigna quien es el jugador siguiente y quien es el anterior
     public void jugadoresContinuos(Tablero t,String jugadores){

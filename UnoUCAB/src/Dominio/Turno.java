@@ -36,10 +36,10 @@ public class Turno implements Runnable{
     // Una vez terminado es turno del jugador
     @Override
     public void run() {
-        enUso=false;
+        enUso=true;
         this.puedeJugar=false; // QUito el turno al jugador
         new Thread(new MensajeUI(panelMensaje,"Esperando el turno",1)).start();
-        // MIentras no sea el turno del jugador
+        // Mientras no sea el turno del jugador
         while(!puedeJugar){
         try{Thread.sleep(10);
             }   catch (InterruptedException ex) {

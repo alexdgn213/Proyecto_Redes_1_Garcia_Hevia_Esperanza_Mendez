@@ -675,6 +675,7 @@ public class Tablero extends javax.swing.JFrame {
         }
         esperarTurno();
         pasar(false);
+        esperarTurno();
     }
     
     public void pasar(boolean voluntario) {
@@ -684,7 +685,6 @@ public class Tablero extends javax.swing.JFrame {
         else{
             s.pasarTurno(codigoJugador,jugadorAnterior, "1",colorActual);
         }
-        esperarTurno();
         mostrarTodo();
         if(voluntario){
             new Thread(new MensajeUI(PanelMensaje,"Pasaste",4)).start();
@@ -693,6 +693,7 @@ public class Tablero extends javax.swing.JFrame {
         else {
             new Thread(new MensajeUI(PanelMensaje,"Perdiste el turno",4)).start();
         }
+        esperarTurno();
     }
     
     public void esperarTurno(){
@@ -708,6 +709,25 @@ public class Tablero extends javax.swing.JFrame {
         puedeCambiarColor = true;
         }
     
+    public void intentarGanar(){
+        if(mano.getCartas().size()==0){
+            s.anunciarVictoria(codigoJugador, String.valueOf(sentido));
+            Fin pantallaNueva = new Fin(true,1000);
+            this.dispose();
+            pantallaNueva.setVisible(true);
+        }
+        
+    }
+    
+    public void perder(){
+        Fin pantallaNueva = new Fin(false,0);
+        this.dispose();
+        pantallaNueva.setVisible(true);
+        
+        
+    }
+    
+    
     // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
         try{
@@ -715,7 +735,6 @@ public class Tablero extends javax.swing.JFrame {
         PanelMano.setPreferredSize(new java.awt.Dimension((126*mano.getCartas().size()+10), 210));
 
         javax.swing.GroupLayout PanelManoLayout = new javax.swing.GroupLayout(PanelMano);
-        PanelMano.setLayout(PanelManoLayout);
         SequentialGroup sg = PanelManoLayout.createSequentialGroup();
         sg.addGap(10,10,10);
         ParallelGroup pg = PanelManoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING);
@@ -726,12 +745,12 @@ public class Tablero extends javax.swing.JFrame {
             nuevaCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource(c.getImagen())));
             nuevaCarta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if(turno.puedeJugar()||turnoExtra){
+                if(turno.puedeJugar()){
                     puedeSacar= true;
                     if(c.puedeJugar(colorActual, mesa.getCartas().get(mesa.getCartas().size()-1))){
                         if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
                             if(sentido==0){
-                            c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                                c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
                             }
                             else{
                                 c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
@@ -739,6 +758,7 @@ public class Tablero extends javax.swing.JFrame {
                             colorActual = c.getColor();
                             mesa.getCartas().add(c);
                             mano.eliminarCarta(c.getCodigo());
+                            intentarGanar();
                             esperarTurno();
                             mostrarTodo();
                         }
@@ -783,7 +803,7 @@ public class Tablero extends javax.swing.JFrame {
         }
         PanelManoLayout.setVerticalGroup(pg);
         PanelManoLayout.setHorizontalGroup(sg);
-        
+        PanelMano.setLayout(PanelManoLayout);
         }
         catch (Exception e){
             System.out.println("hubo problemas");
@@ -900,7 +920,7 @@ public class Tablero extends javax.swing.JFrame {
             mostrarSentido();
             mostrarOtrosJugadores();
             //mostrarCartasJugadores();
-            pack();
+            //pack();
         }
         catch(Exception e) {}
         

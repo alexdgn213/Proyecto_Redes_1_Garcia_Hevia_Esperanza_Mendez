@@ -37,10 +37,8 @@ public class MensajeUI implements Runnable{
     
     @Override
     public void run() {
-        texto = (JLabel)this.PanelMensaje.getComponent(0);
-        imagen = (JLabel)this.PanelMensaje.getComponent(1);
         while(imagen.isVisible()){
-            try{Thread.sleep(100);
+            try{Thread.sleep(1000);
             }   catch (InterruptedException ex) {
                 Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -51,11 +49,7 @@ public class MensajeUI implements Runnable{
         }   catch (InterruptedException ex) {
             Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        texto = (JLabel)this.PanelMensaje.getComponent(0);
-        if(texto.getText().equals(mensaje)){
-            imagen.setVisible(false);
-            texto.setText("");
-        };
-    }
-    
+        imagen.setVisible(false);
+        texto.setText("");
+    } 
 }
