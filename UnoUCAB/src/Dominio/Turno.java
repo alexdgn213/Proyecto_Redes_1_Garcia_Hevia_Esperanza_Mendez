@@ -49,6 +49,7 @@ public class Turno implements Runnable{
             t.mostrarTodo();
         } 
         new Thread(new MensajeUI(panelMensaje,"Es tu turno!",4)).start();
+        t.mostrarTodo();
         enUso=false;
     }
     

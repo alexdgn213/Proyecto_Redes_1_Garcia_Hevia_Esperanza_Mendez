@@ -469,6 +469,7 @@ public class Tablero extends javax.swing.JFrame {
         if(turno.puedeJugar()){
             if(!puedeSacar){
                 puedeSacar= true;
+                mostrarTodo();
                 pasar(true);
             }
             else{
@@ -710,7 +711,6 @@ public class Tablero extends javax.swing.JFrame {
         }
     
     public void intentarGanar(){
-        if(mano.getCartas().size()==0){
             s.anunciarVictoria(codigoJugador, String.valueOf(sentido));
             int resultado = 0;
             resultado += jugador2.sumarPuntaje();
@@ -719,7 +719,6 @@ public class Tablero extends javax.swing.JFrame {
             Fin pantallaNueva = new Fin(true,resultado);
             this.dispose();
             pantallaNueva.setVisible(true);
-        }
         
     }
     
@@ -730,8 +729,7 @@ public class Tablero extends javax.swing.JFrame {
         
         
     }
-    
-    
+        
     // Muestra todas las cartas en la mano del jugador
     public void mostrarMano(){
         try{
@@ -752,37 +750,49 @@ public class Tablero extends javax.swing.JFrame {
                 if(turno.puedeJugar()){
                     puedeSacar= true;
                     if(c.puedeJugar(colorActual, mesa.getCartas().get(mesa.getCartas().size()-1))){
-                        if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
-                            if(sentido==0){
+                        if(mano.getCartas().size()>1){
+                            if(!(c instanceof CartaToma4)&&!(c instanceof CartaCambiaColor)&&!(c instanceof CartaReversa)){
+                                if(sentido==0){
+                                    c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                                }
+                                else{
+                                    c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                                }
+                                colorActual = c.getColor();
+                                mesa.getCartas().add(c);
+                                mano.eliminarCarta(c.getCodigo());
+                                esperarTurno();
+                                mostrarTodo();
+                            }
+                            else if(c instanceof CartaReversa){
+                                if(sentido==1){
                                 c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
+                                }
+                                else{
+                                    c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                                }
+                                colorActual=c.getColor();
+                                mesa.getCartas().add(c);
+                                mano.eliminarCarta(c.getCodigo());
+                                esperarTurno();
+                                mostrarTodo();
+                            }
+                            else {
+                                escogerColor();
+                                cartaCambio = c;
+                            }
+                        }
+                        else{
+                            if(sentido==0){
+                                c.jugar(s,codigoJugador,codigoJugador,"0",colorActual);
                             }
                             else{
-                                c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
+                                c.jugar(s,codigoJugador,codigoJugador,"1",colorActual);
                             }
-                            colorActual = c.getColor();
                             mesa.getCartas().add(c);
                             mano.eliminarCarta(c.getCodigo());
                             intentarGanar();
-                            esperarTurno();
-                            mostrarTodo();
-                        }
-                        else if(c instanceof CartaReversa){
-                            if(sentido==1){
-                            c.jugar(s,codigoJugador,jugadorSiguiente,"0",colorActual);
-                            }
-                            else{
-                                c.jugar(s,codigoJugador,jugadorAnterior,"1",colorActual);
-                            }
-                            colorActual=c.getColor();
-                            mesa.getCartas().add(c);
-                            mano.eliminarCarta(c.getCodigo());
-                            esperarTurno();
-                            mostrarTodo();
-                        }
-                        else {
-                            escogerColor();
-                            cartaCambio = c;
-                        }
+                        }                        
                     
                     
                     }  
@@ -924,7 +934,7 @@ public class Tablero extends javax.swing.JFrame {
             mostrarSentido();
             mostrarOtrosJugadores();
             //mostrarCartasJugadores();
-            //pack();
+            pack();
         }
         catch(Exception e) {}
         
