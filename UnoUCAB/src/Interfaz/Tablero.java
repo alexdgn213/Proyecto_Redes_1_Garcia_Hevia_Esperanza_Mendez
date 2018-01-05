@@ -77,6 +77,7 @@ public class Tablero extends javax.swing.JFrame {
         turno = new Turno(this,PanelMensaje);
         puedeCambiarColor= false; 
         puedeSacar = true;
+        jugadorExtra= "00";
         if(jugadorInicial){
             new Thread(new MensajeUI(PanelMensaje,"Se ha iniciado la partida",4)).start();
             turno.setPuedeJugar(true);
@@ -588,7 +589,7 @@ public class Tablero extends javax.swing.JFrame {
     // Obtiene la primera carta del mazo(debe comprobar que sea valida)
     public void obtenerPrimeraCarta(){
         if(codigoJugador.equals("00")){
-             boolean listo = false;
+            boolean listo = false;
             while(!listo){
                 Carta c = mazo.obtenerCarta();
                 if(c instanceof CartaSimple){
@@ -598,7 +599,19 @@ public class Tablero extends javax.swing.JFrame {
                         Logger.getLogger(MensajeUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     // Por ahora siempre el primer turno es del siguiente(problemas con el envio de yo a yo y con la posibilidad de varios juhadores)
-                    c.jugar(s, codigoJugador, jugadorSiguiente, String.valueOf(sentido),colorActual);
+                    int randomNum = 0 + (int)(Math.random() * 3);
+                    if(randomNum == 0){
+                        c.jugar(s, codigoJugador, codigoJugador, String.valueOf(sentido),colorActual);
+                    }
+                    else if(randomNum == 1){
+                        c.jugar(s, codigoJugador, jugadorSiguiente, String.valueOf(sentido),colorActual);
+                    }
+                    else if(randomNum == 2){
+                        c.jugar(s, codigoJugador, jugadorExtra, String.valueOf(sentido),colorActual);
+                    }
+                    else{
+                        c.jugar(s, codigoJugador, jugadorAnterior, String.valueOf(sentido),colorActual);
+                    }
                     mesa.añadirCarta(c);
                     colorActual=c.getColor();
                     listo=true;

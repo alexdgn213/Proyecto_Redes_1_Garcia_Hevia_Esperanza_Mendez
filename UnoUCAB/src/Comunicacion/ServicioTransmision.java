@@ -100,6 +100,9 @@ public class ServicioTransmision {
                     // La informacion enviada es una carta juagada
                     return nuevaCartaMesa(t,origen,destino,readBuffer[2]);
                 }
+                else if(destino.equals(t.getCodigoJugador())&&origen.equals(t.getCodigoJugador())){
+                    return true;
+                }
                 else{ 
                     return false;
                 }
